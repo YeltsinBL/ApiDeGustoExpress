@@ -1,0 +1,24 @@
+{
+  "name": "apidegustoexpress",
+  "version": "1.0.0",
+  "description": "Apis para el sistema DeGusto",
+  "main": "index.js",
+  "type":"module",
+  "scripts": {
+    "start": "node --watch index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YeltsinBL/ApiDeGustoExpress.git"
+  },
+  "author": "YeltsinBL",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/YeltsinBL/ApiDeGustoExpress/issues"
+  },
+  "homepage": "https://github.com/YeltsinBL/ApiDeGustoExpress#readme",
+  "dependencies": {
+    "express": "4.19.2"
+  }
+}
