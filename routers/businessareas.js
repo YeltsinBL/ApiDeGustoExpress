@@ -1,9 +1,8 @@
 import express from 'express'
+import {getItems} from '../controllers/businessareas.js'
 
 const routers = express.Router()
 
-routers.get('/', (req, res) =>{
-    res.json({'businessArea':'Restaurante'})
-})
+routers.get('/', getItems)
 
 export default routers
