@@ -1,4 +1,4 @@
-import { httpError } from "../helpers/handleError"
+import { httpError } from "../helpers/handleError.js"
 import {getAll} from '../models/businessareas.js'
 export const getItems = async(req, res)=>{
     try {
