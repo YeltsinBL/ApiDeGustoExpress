@@ -24,7 +24,7 @@ fs.readdirSync(pathRouter).filter(async (file) => {
     // Remover la extension de los archivos dentro de la carpeta Routers
     const fileWithOutExt = removeExtension(file)
     // Excluir el archivo index
-    const skip = ['index'].includes(fileWithOutExt)
+    const skip = ['index','README'].includes(fileWithOutExt)
     if(!skip){
         // importar dinámicamente las rutas
         const routeModule = await import(`./${fileWithOutExt}.js`)
