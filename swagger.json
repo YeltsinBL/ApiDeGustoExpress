@@ -1,0 +1,212 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "API DeGusto",
+    "description": "APIs para el sistema de DeGusto",
+    "contact": {
+      "url": "https://www.linkedin.com/in/guillermo-yeltsin-baltodano-león-86938413b/"
+    },
+    "version": "1.0"
+  },
+  "externalDocs": {
+    "description": "Más sobre Swagger",
+    "url": "http://swagger.io"
+  },
+  "servers": [{ "url": "http://localhost:3000/api/" }],
+  "tags": [
+    {
+      "name": "BusinessArea",
+      "description": "Area/Tipo/Rubro de Negocio"
+    },
+    {
+      "name": "Business",
+      "description": "Modulo de Negocio"
+    }
+  ],
+  "paths": {
+    "/businessareas": {
+        "get": {
+            "tags": [
+                "BusinessArea"
+            ],
+            "summary": "Lista de las areas/tipos/rubros de negocios",
+            "description": "Lista de las areas/tipos/rubros de negocios",
+            "operationId": "getBusinessArea",
+            "parameters": [],
+            "responses": {
+                "200": {
+                    "description": "successful operation",
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "type": "array",
+                                "items":{
+                                    "$ref":"#/components/schemas/BusinessArea"
+                                }
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "No implementado"
+                }
+            }
+        }
+    },
+    "/business":{
+        "get":{
+            "tags": [
+                "Business"
+            ],
+            "summary": "Lista de todos los negocios",
+            "description": "Lista de todos los negocios",
+            "operationId": "getBusiness",
+            "responses": {
+                "200":{
+                    "description": "successful operation",
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "type": "array",
+                                "items":{
+                                    "$ref": "#/components/schemas/Business"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "/business/{id}":{
+        "get":{
+            "tags": [
+                "Business"
+            ],
+            "summary": "Obtener un negocio",
+            "description": "Obtener los detalles de un negocio",
+            "operationId": "getBusinessById",
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID del negocio a buscar",
+                    "required": true,
+                    "schema": {
+                      "type": "integer",
+                      "format": "int64"
+                    }
+                }
+            ],
+            "responses": {
+                "200":{
+                    "description": "successful operation",
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "$ref": "#/components/schemas/Business"
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "Negocio no encontrado"
+                }
+            }
+        },
+        "delete":{
+            "tags": [
+                "Business"
+            ],
+            "summary": "Eliminar un negocio",
+            "description": "Enviar el ID del negocio para eliminarlo",
+            "operationId": "deleteBusinessById",
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID del negocio a buscar",
+                    "required": true,
+                    "schema": {
+                      "type": "integer",
+                      "format": "int64"
+                    }
+                }
+            ],"responses": {
+                "200":{
+                    "description": "successful operation",
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "type": "boolean"
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "Negocio no encontrado"
+                }
+            }
+        }
+    }
+  },
+  "components": {
+    "schemas": {
+        "BusinessArea":{
+            "type": "object",
+            "properties": {
+                "businessAreaId":{
+                    "type": "integer",
+                    "format": "int64",
+                    "example":0
+                },
+                "businessAreaName":{
+                    "type": "string",
+                    "example":"Restaurante"
+                }
+            }
+        },
+        "Business":{
+            "type": "object",
+            "properties": {
+                "businessId":{
+                    "type": "integer",
+                    "format": "int64",
+                    "example":0
+                },
+                "businessName":{
+                    "type": "string",
+                    "example":"La Buena Mesa"
+                },
+                "businessAddress":{
+                    "type": "string",
+                    "example":"123 Gourmet Street"
+                },
+                "businessPhoneNumber":{
+                    "type": "string",
+                    "example":"123456789"
+                },
+                "businessStatus":{
+                    "type": "integer",
+                    "format": "int64",
+                    "example":1
+                },
+                "businessLogo":{
+                    "type": "string",
+                    "example":"restaurant_logo.png"
+                },
+                "businessLatitude":{
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 40.712776
+                },
+                "businessLongitude":{
+                    "type": "integer",
+                    "format": "int64",
+                    "example": -74.005974
+                }
+            }
+        }
+    }
+  }
+}
