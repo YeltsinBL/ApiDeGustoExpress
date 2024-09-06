@@ -8,8 +8,6 @@ export async function getAll() {
         const pool = await getConnection()
         let result = await pool.request().query('select * from dbo.BusinessArea;')
         pool.close()
-        console.log('Resultado BD',result)
-
         return result.recordset
     } catch (error) {
       console.error(error)
