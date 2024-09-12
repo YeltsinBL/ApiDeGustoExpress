@@ -192,7 +192,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "$ref": "#/components/schemas/OwnerCreate"
+                            "$ref": "#/components/schemas/Account"
                         }
                     }
                 },
@@ -494,35 +494,6 @@
                 "userName":{
                     "type": "string",
                     "example":"alice_johnson"
-                },
-                "userCreatedAt":{
-                    "type": "string",
-                    "example":"01/09/2024"
-                }
-            }
-        },
-        "OwnerCreate":{
-            "type": "object",
-            "properties": {
-                "ownerName":{
-                    "type": "string",
-                    "example":"Alice Johnson"
-                },
-                "ownerEmail":{
-                    "type": "string",
-                    "example":"alicej@example.com"
-                },
-                "ownerPhoneNumber":{
-                    "type": "string",
-                    "example":"123456789"
-                },
-                "userName":{
-                    "type": "string",
-                    "example":"alice_johnson"
-                },
-                "userPassword":{
-                    "type": "string",
-                    "example":"123"
                 },
                 "userCreatedAt":{
                     "type": "string",

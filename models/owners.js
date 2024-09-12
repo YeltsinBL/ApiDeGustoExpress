@@ -29,15 +29,15 @@ export async function getById({id}) {
 export async function create ({ input }) {
     try {
       const {
-        ownerName, ownerEmail, ownerPhoneNumber, userName, userPassword, userCreatedAt
+        name, email, phoneNumber, userName, password, createDate
       } = input
 
       const pool = await getConnection()
 
       let resultOwner = await pool.request()
-        .input('ownerName', mssql.VarChar, ownerName)
-        .input('ownerEmail', mssql.VarChar, ownerEmail)
-        .input('ownerPhoneNumber', mssql.VarChar, ownerPhoneNumber)
+        .input('ownerName', mssql.VarChar, name)
+        .input('ownerEmail', mssql.VarChar, email)
+        .input('ownerPhoneNumber', mssql.VarChar, phoneNumber)
         .query('Insert into Owners (ownerName, ownerEmail, ownerPhoneNumber) ' +
             'values(@ownerName,@ownerEmail,@ownerPhoneNumber); Select SCOPE_IDENTITY() as ownerId;')
 
@@ -45,19 +45,19 @@ export async function create ({ input }) {
 
       await pool.request()
         .input('userName',mssql.VarChar, userName)
-        .input('userPassword',mssql.VarChar, userPassword)
-        .input('userCreatedAt',mssql.Date, userCreatedAt)
+        .input('userPassword',mssql.VarChar, password)
+        .input('userCreatedAt',mssql.Date, createDate)
         .input('user_OwnerId',mssql.Int, ownerId)
         .query('Insert into Users (userName, userPassword, userCreatedAt, user_OwnerId) '+
             'values(@userName, @userPassword, @userCreatedAt, @user_OwnerId)'
         )
       pool.close()
       return {'ownerId':ownerId,
-            'ownerName':ownerName,
-            'ownerEmail':ownerEmail,
-            'ownerPhoneNumber':ownerPhoneNumber,
+            'ownerName':name,
+            'ownerEmail':email,
+            'ownerPhoneNumber':phoneNumber,
             'userName':userName,
-            'userCreatedAt': userCreatedAt
+            'userCreatedAt': createDate
       }
     } catch (error) {
       console.error(error)
