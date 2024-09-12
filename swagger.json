@@ -25,6 +25,10 @@
     {
       "name": "Owner",
       "description": "Modulo de Propietarios"
+    },
+    {
+      "name": "Customer",
+      "description": "Modulo de Clientes"
     }
   ],
   "paths": {
@@ -280,6 +284,134 @@
                 }
             }
         }
+    },
+    "/customers": {
+        "get":{
+            "tags": [ "Customer" ],
+            "summary": "Lista de los clientes",
+            "description": "Lista de los clientes",
+            "operationId": "getCustomer",
+            "parameters": [],
+            "responses": {
+                "200": {
+                    "description": "successful operation",
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "type": "array",
+                                "items":{
+                                    "$ref":"#/components/schemas/Customer"
+                                }
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "No implementado"
+                }
+            }
+        },
+        "post":{
+            "tags": ["Customer"],
+            "summary": "Crear cuenta del Cliente",
+            "description": "Registrar al Cliente",
+            "operationId": "createCustomer",
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Account"
+                        }
+                    }
+                },
+                "required": true
+            },
+            "responses": {
+                "201": {
+                    "description": "successful operation",
+                    "content": {
+                    "application/json": {
+                        "schema": {
+                        "$ref": "#/components/schemas/Customer"
+                        }
+                    }
+                    }
+                },
+                "400": {
+                    "description": "Invalid input"
+                },
+                "422": {
+                    "description": "Validation exception"
+                }
+            }
+        }
+    },
+    "/customers/{id}":{
+        "get":{
+            "tags": [ "Customer" ],
+            "summary": "Cuenta del Cliente",
+            "description": "Datos del cliente por Id",
+            "operationId": "getCustomerById",
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID del cliente a buscar",
+                    "required": true,
+                    "schema": {
+                      "type": "integer",
+                      "format": "int64"
+                    }
+                }
+            ],
+            "responses": {
+                "200":{
+                    "description": "successful operation",
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "$ref": "#/components/schemas/Customer"
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "Cliente no encontrado"
+                }
+            }
+        },
+        "delete":{
+            "tags": [ "Customer" ],
+            "summary": "Eliminar un cliente",
+            "description": "Enviar el ID del cliente para eliminarlo",
+            "operationId": "deleteCustomerById",
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID del cliente a buscar",
+                    "required": true,
+                    "schema": {
+                      "type": "integer",
+                      "format": "int64"
+                    }
+                }
+            ],"responses": {
+                "200":{
+                    "description": "successful operation",
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "type": "boolean"
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "Cliente no encontrado"
+                }
+            }
+        }
     }
   },
   "components": {
@@ -391,6 +523,65 @@
                 "userPassword":{
                     "type": "string",
                     "example":"123"
+                },
+                "userCreatedAt":{
+                    "type": "string",
+                    "example":"01/09/2024"
+                }
+            }
+        },
+        "Account":{
+            "type": "object",
+            "properties": {
+                "name":{
+                    "type": "string",
+                    "example":"Alice Johnson"
+                },
+                "email":{
+                    "type": "string",
+                    "example":"alicej@example.com"
+                },
+                "phoneNumber":{
+                    "type": "string",
+                    "example":"123456789"
+                },
+                "userName":{
+                    "type": "string",
+                    "example":"alice_johnson"
+                },
+                "password":{
+                    "type": "string",
+                    "example":"123"
+                },
+                "createDate":{
+                    "type": "string",
+                    "example":"01/09/2024"
+                }
+            }
+        },
+        "Customer":{
+            "type": "object",
+            "properties": {
+                "customerId":{
+                    "type": "integer",
+                    "format": "int64",
+                    "example":0
+                },
+                "customerName":{
+                    "type": "string",
+                    "example":"Alice Johnson"
+                },
+                "customerEmail":{
+                    "type": "string",
+                    "example":"alicej@example.com"
+                },
+                "customerPhoneNumber":{
+                    "type": "string",
+                    "example":"123456789"
+                },
+                "userName":{
+                    "type": "string",
+                    "example":"alice_johnson"
                 },
                 "userCreatedAt":{
                     "type": "string",
