@@ -84,6 +84,74 @@
                     }
                 }
             }
+        },
+        "post":{
+            "tags": ["Business"],
+            "summary": "Crear Negocio",
+            "description": "Registrar un negocio",
+            "operationId": "createBusiness",
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Business"
+                        }
+                    }
+                },
+                "required": true
+            },
+            "responses": {
+                "201": {
+                    "description": "successful operation",
+                    "content": {
+                    "application/json": {
+                        "schema": {
+                        "$ref": "#/components/schemas/Business"
+                        }
+                    }
+                    }
+                },
+                "400": {
+                    "description": "Invalid input"
+                },
+                "422": {
+                    "description": "Validation exception"
+                }
+            }
+        },
+        "put":{
+            "tags": ["Business"],
+            "summary": "Actualizar Negocio",
+            "description": "Modificar un negocio",
+            "operationId": "updateBusiness",
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Business"
+                        }
+                    }
+                },
+                "required": true
+            },
+            "responses": {
+                "200": {
+                    "description": "successful operation",
+                    "content": {
+                    "application/json": {
+                        "schema": {
+                        "$ref": "#/components/schemas/Business"
+                        }
+                    }
+                    }
+                },
+                "400": {
+                    "description": "Invalid input"
+                },
+                "422": {
+                    "description": "Validation exception"
+                }
+            }
         }
     },
     "/business/{id}":{
@@ -468,6 +536,16 @@
                     "type": "integer",
                     "format": "int64",
                     "example": -74.005974
+                },
+                "business_AreaId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 1
+                },
+                "business_OwnerId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 1
                 }
             }
         },
