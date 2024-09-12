@@ -21,6 +21,10 @@
     {
       "name": "Business",
       "description": "Modulo de Negocio"
+    },
+    {
+      "name": "Owner",
+      "description": "Modulo de Propietarios"
     }
   ],
   "paths": {
@@ -148,6 +152,134 @@
                 }
             }
         }
+    },
+    "/owners": {
+        "get":{
+            "tags": [ "Owner" ],
+            "summary": "Lista de los propietarios de negocios",
+            "description": "Lista de los propietarios de negocios",
+            "operationId": "getOwner",
+            "parameters": [],
+            "responses": {
+                "200": {
+                    "description": "successful operation",
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "type": "array",
+                                "items":{
+                                    "$ref":"#/components/schemas/Owner"
+                                }
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "No implementado"
+                }
+            }
+        },
+        "post":{
+            "tags": ["Owner"],
+            "summary": "Crear cuenta del Propietario",
+            "description": "Registrar al propietario",
+            "operationId": "createOwner",
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/OwnerCreate"
+                        }
+                    }
+                },
+                "required": true
+            },
+            "responses": {
+                "201": {
+                    "description": "successful operation",
+                    "content": {
+                    "application/json": {
+                        "schema": {
+                        "$ref": "#/components/schemas/Owner"
+                        }
+                    }
+                    }
+                },
+                "400": {
+                    "description": "Invalid input"
+                },
+                "422": {
+                    "description": "Validation exception"
+                }
+            }
+        }
+    },
+    "/owners/{id}":{
+        "get":{
+            "tags": [ "Owner" ],
+            "summary": "Propietario de negocios",
+            "description": "Datos del propietario de negocios por Id",
+            "operationId": "getOwnerById",
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID del propietario a buscar",
+                    "required": true,
+                    "schema": {
+                      "type": "integer",
+                      "format": "int64"
+                    }
+                }
+            ],
+            "responses": {
+                "200":{
+                    "description": "successful operation",
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "$ref": "#/components/schemas/Owner"
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "Propietario no encontrado"
+                }
+            }
+        },
+        "delete":{
+            "tags": [ "Owner" ],
+            "summary": "Eliminar un propietario",
+            "description": "Enviar el ID del propietario para eliminarlo",
+            "operationId": "deleteOwnerById",
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID del propietario a buscar",
+                    "required": true,
+                    "schema": {
+                      "type": "integer",
+                      "format": "int64"
+                    }
+                }
+            ],"responses": {
+                "200":{
+                    "description": "successful operation",
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "type": "boolean"
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "Negocio no encontrado"
+                }
+            }
+        }
     }
   },
   "components": {
@@ -204,6 +336,65 @@
                     "type": "integer",
                     "format": "int64",
                     "example": -74.005974
+                }
+            }
+        },
+        "Owner":{
+            "type": "object",
+            "properties": {
+                "ownerId":{
+                    "type": "integer",
+                    "format": "int64",
+                    "example":0
+                },
+                "ownerName":{
+                    "type": "string",
+                    "example":"Alice Johnson"
+                },
+                "ownerEmail":{
+                    "type": "string",
+                    "example":"alicej@example.com"
+                },
+                "ownerPhoneNumber":{
+                    "type": "string",
+                    "example":"123456789"
+                },
+                "userName":{
+                    "type": "string",
+                    "example":"alice_johnson"
+                },
+                "userCreatedAt":{
+                    "type": "string",
+                    "example":"01/09/2024"
+                }
+            }
+        },
+        "OwnerCreate":{
+            "type": "object",
+            "properties": {
+                "ownerName":{
+                    "type": "string",
+                    "example":"Alice Johnson"
+                },
+                "ownerEmail":{
+                    "type": "string",
+                    "example":"alicej@example.com"
+                },
+                "ownerPhoneNumber":{
+                    "type": "string",
+                    "example":"123456789"
+                },
+                "userName":{
+                    "type": "string",
+                    "example":"alice_johnson"
+                },
+                "userPassword":{
+                    "type": "string",
+                    "example":"123"
+                },
+                "userCreatedAt":{
+                    "type": "string",
+                    "example":"01/09/2024"
                 }
             }
         }
