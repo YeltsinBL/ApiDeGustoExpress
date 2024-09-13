@@ -12,7 +12,7 @@
     "description": "Más sobre Swagger",
     "url": "http://swagger.io"
   },
-  "servers": [{ "url": "http://localhost:3000/api/" }],
+  "servers": [{ "url": "http://localhost:3000/api/" },{"url": "http://localhost:3000/"}],
   "tags": [
     {
       "name": "BusinessArea",
@@ -92,9 +92,9 @@
             "operationId": "createBusiness",
             "requestBody": {
                 "content": {
-                    "application/json": {
+                    "multipart/form-data": {
                         "schema": {
-                            "$ref": "#/components/schemas/Business"
+                            "$ref": "#/components/schemas/BusinessTwo"
                         }
                     }
                 },
@@ -637,6 +637,59 @@
                     "example":"01/09/2024"
                 }
             }
+        },
+        "BusinessTwo":{
+            "type": "object",
+            "properties": {
+                "businessName":{
+                    "type": "string",
+                    "example":"La Buena Mesa"
+                },
+                "businessAddress":{
+                    "type": "string",
+                    "example":"123 Gourmet Street"
+                },
+                "businessPhoneNumber":{
+                    "type": "string",
+                    "example":"123456789"
+                },
+                "businessStatus":{
+                    "type": "integer",
+                    "format": "int64",
+                    "example":1
+                },
+                "businessLogo":{
+                    "type": "string",
+                    "example":"restaurant_logo.png"
+                },
+                "businessLatitude":{
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 40.712776
+                },
+                "businessLongitude":{
+                    "type": "integer",
+                    "format": "int64",
+                    "example": -74.005974
+                },
+                "business_AreaId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 1
+                },
+                "business_OwnerId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 1
+                },
+                "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "La imagen a subir"
+                }
+            },
+            "required": ["file", "businessName", "businessAddress","businessPhoneNumber",
+        "businessStatus","businessLatitude","businessLongitude","business_AreaId","business_OwnerId"]
         }
     }
   }

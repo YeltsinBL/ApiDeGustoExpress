@@ -35,6 +35,7 @@ export const deleteItemById = async(req, res) =>{
 }
 export const createItem = async(req, res) =>{
     try {
+        req.body.businessLogo = req.file.path
         const result = await create({ input: req.body })
         res.status(201).json(result)
     } catch (error) {
