@@ -12,6 +12,7 @@ const PORT = process.env.PORT ?? 3000
 
 app.use(express.json()) // permitir usar JSON
 
+app.disable('x-powered-by')
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api', router)
