@@ -12,6 +12,8 @@ const PORT = process.env.PORT ?? 3000
 
 app.use(express.json()) // permitir usar JSON
 
+app.use(express.urlencoded({ extended: true }));
+
 app.use('/api', router)
 
 // app.get('/', (req, res) =>{
