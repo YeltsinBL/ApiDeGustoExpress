@@ -29,6 +29,10 @@
     {
       "name": "Customer",
       "description": "Modulo de Clientes"
+    },
+    {
+      "name": "Image",
+      "description": "Modulo de Imágenes"
     }
   ],
   "paths": {
@@ -488,6 +492,124 @@
                 },
                 "404": {
                     "description": "Cliente no encontrado"
+                }
+            }
+        }
+    },
+    "/images/{root}/{name}/{type}/{image}":{
+        "get":{
+            "tags": [
+                "Image"
+            ],
+            "summary": "Mostrar imagen",
+            "description": "Agrega la ruta completa de la imagen a visualizar",
+            "operationId": "getImagen",
+            "parameters": [
+                {
+                    "name": "root",
+                    "in": "path",
+                    "description": "Ruta inicial",
+                    "required": true,
+                    "schema": {
+                      "type": "string"
+                    }
+                },
+                {
+                    "name": "name",
+                    "in": "path",
+                    "description": "Nombre del Negocio",
+                    "required": true,
+                    "schema": {
+                      "type": "string"
+                    }
+                },
+                {
+                    "name": "type",
+                    "in": "path",
+                    "description": "Tipo de imagen",
+                    "required": true,
+                    "schema": {
+                      "type": "string"
+                    }
+                },
+                {
+                    "name": "image",
+                    "in": "path",
+                    "description": "Nombre de la imagen",
+                    "required": true,
+                    "schema": {
+                      "type": "string"
+                    }
+                }
+            ],
+            "responses": {
+                "200":{
+                    "description": "successful operation",
+                    "content": {
+                        "imagen/*":{
+                            "schema":{
+                                "type": "string",
+                                "format": "binary",
+                                "example":"Va a cargar la imagen"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "/images/upload":{
+        "post":{
+            "tags": ["Image"],
+            "summary": "Guardar Imagen",
+            "description": "Es para hacer pruebas de guardar image",
+            "operationId": "saveImage",
+            "requestBody": {
+                "content": {
+                    "multipart/form-data": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "businessName":{
+                                    "type": "string",
+                                    "example":"La Buena Mesa"
+                                },
+                                "businessAddress":{
+                                    "type": "string",
+                                    "example":"123 Gourmet Street"
+                                },
+                                "businessPhoneNumber":{
+                                    "type": "string",
+                                    "example":"123456789"
+                                },
+                                "file": {
+                                    "type": "string",
+                                    "format": "binary",
+                                    "description": "La imagen a subir"
+                                }
+                            },
+                            "required": ["file", "businessName", "businessAddress","businessPhoneNumber"]
+                        }
+                    }
+                },
+                "required": true
+            },
+            "responses": {
+                "201": {
+                    "description": "successful operation",
+                    "content": {
+                    "application/json": {
+                        "schema": {
+                        "$ref": "#/components/schemas/Business"
+                        }
+                    }
+                    }
+                },
+                "400": {
+                    "description": "Invalid input"
+                },
+                "422": {
+                    "description": "Validation exception"
                 }
             }
         }
