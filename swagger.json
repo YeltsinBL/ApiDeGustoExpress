@@ -15,6 +15,10 @@
   "servers": [{ "url": "http://localhost:3000/api/" },{"url": "http://localhost:3000/"}],
   "tags": [
     {
+        "name": "User",
+        "description": "Modulo de Usuario"
+      },
+    {
       "name": "BusinessArea",
       "description": "Area/Tipo/Rubro de Negocio"
     },
@@ -36,6 +40,66 @@
     }
   ],
   "paths": {
+    "/user/login":{
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Credenciales para iniciar sesión",
+        "description": "",
+        "operationId": "loginUser",
+        "parameters": [
+          {
+            "name": "userName",
+            "in": "query",
+            "description": "Usuario",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example":"prueba"
+            }
+          },
+          {
+            "name": "userPassword",
+            "in": "query",
+            "description": "Contraseña",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example":"123"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                    "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Negocio no encontrado",
+            "content": {
+                "application/json":{
+                    "schema":{
+                        "type": "object",
+                        "properties": {
+                            "message":{
+                                "type": "string",
+                                "example":"Usuario o contraseña incorrectos"
+                            }
+                        }
+                    }
+                }
+            }
+          }
+        }
+      }
+    },
     "/businessareas": {
         "get": {
             "tags": [
@@ -617,6 +681,23 @@
   },
   "components": {
     "schemas": {
+        "User":{
+            "type": "object",
+            "properties": {
+                "userName":{
+                    "type": "string",
+                    "example":"prueba"
+                },
+                "userTypeId":{
+                    "type": "integer",
+                    "example":0
+                },
+                "userType":{
+                    "type": "integer",
+                    "example":0
+                }
+            }
+        },
         "BusinessArea":{
             "type": "object",
             "properties": {
