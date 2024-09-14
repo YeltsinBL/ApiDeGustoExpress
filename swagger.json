@@ -118,40 +118,6 @@
                     "description": "Validation exception"
                 }
             }
-        },
-        "put":{
-            "tags": ["Business"],
-            "summary": "Actualizar Negocio",
-            "description": "Modificar un negocio",
-            "operationId": "updateBusiness",
-            "requestBody": {
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "$ref": "#/components/schemas/Business"
-                        }
-                    }
-                },
-                "required": true
-            },
-            "responses": {
-                "200": {
-                    "description": "successful operation",
-                    "content": {
-                    "application/json": {
-                        "schema": {
-                        "$ref": "#/components/schemas/Business"
-                        }
-                    }
-                    }
-                },
-                "400": {
-                    "description": "Invalid input"
-                },
-                "422": {
-                    "description": "Validation exception"
-                }
-            }
         }
     },
     "/business/{id}":{
@@ -221,6 +187,51 @@
                 },
                 "404": {
                     "description": "Negocio no encontrado"
+                }
+            }
+        },
+        "put":{
+            "tags": ["Business"],
+            "summary": "Actualizar Negocio",
+            "description": "Modificar un negocio",
+            "operationId": "updateBusiness",
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID del negocio a buscar",
+                    "required": true,
+                    "schema": {
+                      "type": "integer",
+                      "format": "int64"
+                    }
+                }
+            ],"requestBody": {
+                "content": {
+                    "multipart/form-data": {
+                        "schema": {
+                            "$ref": "#/components/schemas/BusinessTwo"
+                        }
+                    }
+                },
+                "required": true
+            },
+            "responses": {
+                "200": {
+                    "description": "successful operation",
+                    "content": {
+                    "application/json": {
+                        "schema": {
+                        "$ref": "#/components/schemas/Business"
+                        }
+                    }
+                    }
+                },
+                "400": {
+                    "description": "Invalid input"
+                },
+                "422": {
+                    "description": "Validation exception"
                 }
             }
         }

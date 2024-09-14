@@ -7,6 +7,6 @@ routers.get('/', getItems)
 routers.get('/:id', getItemById)
 routers.delete('/:id', deleteItemById)
 routers.post('/', createItem)
-routers.put('/', updateItem)
+routers.put('/:id', updateItem)
 
 export default routers
