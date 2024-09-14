@@ -2,6 +2,7 @@ import express from 'express'
 import dotenv from 'dotenv'
 import router from './routers/index.js'
 import swaggerUI from 'swagger-ui-express'
+import cors from 'cors'
 import { readJson } from './utils.js'
 const swagger = readJson('./swagger.json')
 
@@ -9,7 +10,7 @@ dotenv.config()
 const app = express()
 
 const PORT = process.env.PORT ?? 3000
-
+app.use(cors())
 app.use(express.json()) // permitir usar JSON
 
 app.disable('x-powered-by')
