@@ -15,6 +15,17 @@ export async function getAll({input}) {
       console.error(error)
     }
 }
+
+
+export async function getAllStates() {
+  try {
+      return [{"businessStatus":1,"businessStatusName":"Solicitud"},
+        {"businessStatus":2,"businessStatusName":"Aprobado"},
+        {"businessStatus":3,"businessStatusName":"Rechazado"}]
+  } catch (error) {
+    console.error(error)
+  }
+}
 export async function getAllMobile() {
   try {
       const pool = await getConnection()

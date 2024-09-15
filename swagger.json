@@ -385,6 +385,39 @@
         }
     },
     "/business/states":{
+        "get": {
+            "tags": [
+                "Business"
+            ],
+            "summary": "Lista de los tipos de estados para los negocios",
+            "description": "Lista de los tipos de estados",
+            "operationId": "getBusinessStatesList",
+            "responses": {
+                "200": {
+                    "description": "successful operation",
+                    "content": {
+                        "application/json": {
+                            "schema":{
+                                "type": "object",
+                                "properties": {
+                                    "businessStatus":{
+                                        "type": "integer",
+                                        "example":1
+                                    },
+                                    "businessStatusName":{
+                                        "type":"string",
+                                        "example":"Solicitud"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "No implementado"
+                }
+            }
+        },
         "put":{
             "tags":["Business"],
             "summary":"Actualizar solo el estado del negocio",

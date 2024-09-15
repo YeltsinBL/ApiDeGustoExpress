@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from "path";
 import { directoryPath } from '../utils.js'
 import { httpError } from "../helpers/handleError.js"
-import { getAll, getById,deleteById, create, upload, getAllMobile, uploadState } from '../models/business.js'
+import { getAll, getById,deleteById, create, upload, getAllMobile, uploadState, getAllStates } from '../models/business.js'
 
 // Función para verificar si el archivo es una imagen
 const imageFilter = (req, file, cb) => {
@@ -90,6 +90,14 @@ export const getItemById = async(req, res) => {
         const business = await getById({id})
         if (business) return res.json(business)
         res.status(404).json({ message: 'Negocio no encontrada' })
+    } catch (e) {
+        httpError(res,e)
+    }
+}
+export const getItemsStates = async(req, res)=>{
+    try {
+        const listAll = await getAllStates()
+        res.send(listAll)
     } catch (e) {
         httpError(res,e)
     }
