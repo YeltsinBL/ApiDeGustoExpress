@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from "path";
 import { directoryPath } from '../utils.js'
 import { httpError } from "../helpers/handleError.js"
-import { getAll, getById,deleteById, create, upload } from '../models/business.js'
+import { getAll, getById,deleteById, create, upload, getAllMobile } from '../models/business.js'
 
 // Función para verificar si el archivo es una imagen
 const imageFilter = (req, file, cb) => {
@@ -65,7 +65,18 @@ const uploadSingleImageAsync = (req, res) => {
 };
 export const getItems = async(req, res)=>{
     try {
-        const listAll = await getAll()
+        const input = req.query;
+        if(input.userType==2) return res.status(404).json({ message: 'No tienes acceso' })
+        const listAll = await getAll({input})
+        res.send(listAll)
+
+    } catch (e) {
+        httpError(res,e)
+    }
+}
+export const getItemsMobile = async(req, res)=>{
+    try {
+        const listAll = await getAllMobile()
         res.send(listAll)
 
     } catch (e) {

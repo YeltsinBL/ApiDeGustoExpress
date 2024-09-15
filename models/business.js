@@ -1,13 +1,29 @@
 import {getConnection, mssql} from './sql/connection_sql.js'
-export async function getAll() {
+export async function getAll({input}) {
     try {
+      console.log(input)
+      const {userType, userTypeId} = input
+      console.log(parseInt(userType),parseInt(userTypeId))
         const pool = await getConnection()
-        let result = await pool.request().query('select * from dbo.Business;')
+        let addWhere = ''
+        if(parseInt(userType)==1) {
+          addWhere='where business_OwnerId='+parseInt(userTypeId)}
+        let result = await pool.request().query('select * from dbo.Business '+addWhere)
         pool.close()
         return result.recordset
     } catch (error) {
       console.error(error)
     }
+}
+export async function getAllMobile() {
+  try {
+      const pool = await getConnection()
+      let result = await pool.request().query('select * from dbo.Business where businessStatus=2')
+      pool.close()
+      return result.recordset
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 export async function getById({id}) {

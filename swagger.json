@@ -137,6 +137,28 @@
             "summary": "Lista de todos los negocios",
             "description": "Lista de todos los negocios",
             "operationId": "getBusiness",
+            "parameters": [
+                {
+                    "name": "userType",
+                    "in": "query",
+                    "description": "Tipo de Usuario ",
+                    "required": true,
+                    "schema": {
+                        "type": "integer",
+                        "example":0
+                    }
+                },
+                {
+                    "name": "userTypeId",
+                    "in": "query",
+                    "description": "Id del Tipo de Usuario ",
+                    "required": true,
+                    "schema": {
+                        "type": "integer",
+                        "example":0
+                    }
+                }
+        ],
             "responses": {
                 "200":{
                     "description": "successful operation",
@@ -150,6 +172,22 @@
                             }
                         }
                     }
+                },
+                "400": {
+                  "description": "Negocio no encontrado",
+                  "content": {
+                      "application/json":{
+                          "schema":{
+                              "type": "object",
+                              "properties": {
+                                  "message":{
+                                      "type": "string",
+                                      "example":"Usuario o contraseña incorrectos"
+                                  }
+                              }
+                          }
+                      }
+                  }
                 }
             }
         },
@@ -184,6 +222,47 @@
                 },
                 "422": {
                     "description": "Validation exception"
+                }
+            }
+        }
+    },
+    "/business/mobile":{
+        "get":{
+            "tags": [
+                "Business"
+            ],
+            "summary": "Lista de todos los negocios activos en la aplicación móvil",
+            "description": "Lista de todos los negocios activos",
+            "operationId": "getBusinessMobile",
+            "responses": {
+                "200":{
+                    "description": "successful operation",
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "type": "array",
+                                "items":{
+                                    "$ref": "#/components/schemas/Business"
+                                }
+                            }
+                        }
+                    }
+                },
+                "400": {
+                  "description": "Negocio no encontrado",
+                  "content": {
+                      "application/json":{
+                          "schema":{
+                              "type": "object",
+                              "properties": {
+                                  "message":{
+                                      "type": "string",
+                                      "example":"Usuario o contraseña incorrectos"
+                                  }
+                              }
+                          }
+                      }
+                  }
                 }
             }
         }
