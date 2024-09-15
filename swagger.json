@@ -353,7 +353,8 @@
                       "format": "int64"
                     }
                 }
-            ],"requestBody": {
+            ],
+            "requestBody": {
                 "content": {
                     "multipart/form-data": {
                         "schema": {
@@ -379,6 +380,74 @@
                 },
                 "422": {
                     "description": "Validation exception"
+                }
+            }
+        }
+    },
+    "/business/states":{
+        "put":{
+            "tags":["Business"],
+            "summary":"Actualizar solo el estado del negocio",
+            "description":"Enviar el valor del estado del negocio",
+            "operationId":"updateBusinessState",
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema":{
+                            "type": "object",
+                            "properties": {
+                                "businessId":{
+                                    "type": "integer",
+                                    "format": "int64",
+                                    "example":1
+                                },
+                                "businessStatus":{
+                                    "type":"integer",
+                                    "format": "int64",
+                                    "example":2
+                                }
+                            }
+                        }
+                    }
+                },
+                "required": true
+            },
+            "responses": {
+                "200": {
+                    "description": "successful operation",
+                    "content": {
+                        "application/json": {
+                            "schema":{
+                                "type": "object",
+                                "properties": {
+                                    "businessId":{
+                                        "type": "integer",
+                                        "example":1
+                                    },
+                                    "businessStatus":{
+                                        "type":"integer",
+                                        "example":2
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    "description": "Valor invalido",
+                    "content": {
+                        "application/json": {
+                            "schema":{
+                                "type": "object",
+                                "properties": {
+                                    "message":{
+                                        "type": "string",
+                                        "example":"Valor de estado invalida."
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

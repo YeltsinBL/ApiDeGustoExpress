@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from "path";
 import { directoryPath } from '../utils.js'
 import { httpError } from "../helpers/handleError.js"
-import { getAll, getById,deleteById, create, upload, getAllMobile } from '../models/business.js'
+import { getAll, getById,deleteById, create, upload, getAllMobile, uploadState } from '../models/business.js'
 
 // Función para verificar si el archivo es una imagen
 const imageFilter = (req, file, cb) => {
@@ -121,6 +121,7 @@ export const createItem = async(req, res) =>{
 }
 export const updateItem = async(req, res) =>{
     try {
+        console.log('aquí')
         await uploadSingleImageAsync(req,res)
         const {id} = req.params
         req.body.businessId = id
@@ -130,5 +131,16 @@ export const updateItem = async(req, res) =>{
     } catch (error) {
         return res.status(400).json({message: error.message})
         // httpError(res,e)
+    }
+}
+export const updateStates = async(req, res) => {
+    try {
+        console.log('controller: ', req.body)
+        if(![1,2,3].includes(req.body.businessStatus)) return res.status(400).json({message:'Valor de estado invalida.'})
+        const business = await uploadState({input:req.body})
+        if (business) return res.json(business)
+        res.status(404).json({ message: 'Estado del Negocio no actualizado' })
+    } catch (e) {
+        httpError(res,e)
     }
 }

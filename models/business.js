@@ -100,7 +100,7 @@ export async function create({input}) {
 
 export async function upload({input}) {
   try {
-    console.log(input)
+    //console.log(input)
     const {
       businessId, businessName, businessAddress,
       businessPhoneNumber, businessStatus, businessLogo,
@@ -125,7 +125,7 @@ export async function upload({input}) {
             ' businessLongitude= @businessLongitude ' +
             'where businessId= @businessId;'
           )
-    console.log(result)
+    //console.log(result)
     return {
       'businessId':businessId,
       'businessName':businessName,
@@ -137,6 +137,28 @@ export async function upload({input}) {
       'businessLongitude':businessLongitude,
       'business_AreaId':business_AreaId,
       'business_OwnerId':business_OwnerId
+    }   
+  } catch (error) {
+    
+  }
+}
+
+export async function uploadState({input}) {
+  try {
+    const {businessId, businessStatus} = input
+    console.log('input: ',businessId,businessStatus)
+    const pool = await getConnection()
+    let result = await pool.request()
+          .input('businessId',mssql.Int,businessId)
+          .input('businessStatus',mssql.Int,businessStatus)
+          .query('update Business '+
+            'set businessStatus= @businessStatus '+
+            'where businessId= @businessId;'
+          )
+    console.log('result: ',result)
+    return {
+      'businessId':businessId,
+      'businessStatus':businessStatus
     }   
   } catch (error) {
     
