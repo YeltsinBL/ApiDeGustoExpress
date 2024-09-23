@@ -3,9 +3,9 @@ import { login, getItems, getItemById,createItem, deleteItemById } from "../cont
 
 const routers = express.Router()
 
-routers.get('/login', login)
 routers.get('/', getItems)
 routers.get('/:id', getItemById)
+routers.post('/login', login)
 routers.post('/', createItem)
 routers.delete('/:id', deleteItemById)
 

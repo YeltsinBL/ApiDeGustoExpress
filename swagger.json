@@ -41,35 +41,31 @@
   ],
   "paths": {
     "/user/login":{
-      "get": {
-        "tags": [
-          "User"
-        ],
+      "post": {
+        "tags": [ "User" ],
         "summary": "Credenciales para iniciar sesión",
         "description": "",
         "operationId": "loginUser",
-        "parameters": [
-          {
-            "name": "userName",
-            "in": "query",
-            "description": "Usuario",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example":"prueba"
+        "requestBody":{
+            "content": {
+                "application/json":{
+                    "schema":{
+                        "type": "object",
+                        "properties": {
+                            "userName":{
+                                  "type": "string",
+                                  "example":"prueba"
+                              },
+                              "userPassword":{
+                                  "type": "string",
+                                  "example":"123"
+                                
+                              }
+                        }
+                    }
+                }
             }
-          },
-          {
-            "name": "userPassword",
-            "in": "query",
-            "description": "Contraseña",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example":"123"
-            }
-          }
-        ],
+        },
         "responses": {
           "200": {
             "description": "successful operation",
@@ -82,7 +78,7 @@
             }
           },
           "400": {
-            "description": "Negocio no encontrado",
+            "description": "Credenciales incorrectos",
             "content": {
                 "application/json":{
                     "schema":{
@@ -91,6 +87,22 @@
                             "message":{
                                 "type": "string",
                                 "example":"Usuario o contraseña incorrectos"
+                            }
+                        }
+                    }
+                }
+            }
+          },
+          "403": {
+            "description": "Usuario suspendido",
+            "content": {
+                "application/json":{
+                    "schema":{
+                        "type": "object",
+                        "properties": {
+                            "message":{
+                                "type": "string",
+                                "example":"Cuenta de usuario suspendido"
                             }
                         }
                     }

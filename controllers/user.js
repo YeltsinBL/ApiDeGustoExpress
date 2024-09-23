@@ -2,9 +2,11 @@ import { getAccount, getAll, getById, deleteById, create } from "../models/user.
 import { httpError } from "../helpers/handleError.js"
 export const login = async(req, res)=>{
     try {
-        const user = await getAccount({ input: req.query })
+        const user = await getAccount({ input: req.body })
         console.log(user.length)
-        if(user.length==0) res.status(400).json({message:"Usuario o contraseña incorrectos"})
+        if(user.length==0) return res.status(400).json({message:"Usuario o contraseña incorrectos"})
+        const [{userStatus}] = user
+        if(userStatus == 2) return res.status(403).json({message:"Cuenta suspendida."})
         res.send(user[0])
     } catch (e) {
         httpError(res,e)

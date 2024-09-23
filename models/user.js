@@ -8,7 +8,7 @@ export async function getAccount ({ input }) {
                 .input('userPassword', mssql.VarChar, userPassword)
                 .query('SELECT u.userId, u.userName, u.userStatus '+
                         'FROM Users u '+
-                        'WHERE u.userName=@userName AND u.userPassword=@userPassword AND u.userStatus !=2'
+                        'WHERE u.userName=@userName AND u.userPassword=@userPassword;'
                     )
         pool.close()
         return result.recordset
