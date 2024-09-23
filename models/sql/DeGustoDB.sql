@@ -32,6 +32,7 @@ CREATE TABLE Users (
   userName VARCHAR(100) NOT NULL,
   userPassword VARCHAR(250) NOT NULL,
   userCreatedAt DATE NOT NULL,
+  userStatus INT NOT NULL,
   user_personId INT NULL REFERENCES Persons(personId)
 );
 CREATE TABLE BusinessArea(

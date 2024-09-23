@@ -20,13 +20,13 @@ VALUES
 ('Charles Black', 'charlesb@example.com', '901234567',2),
 ('Sophia Blue', 'sophiablue@example.com', '012345678',2);
 
-INSERT INTO Users (userName, userPassword, userCreatedAt, user_PersonId)
+INSERT INTO Users (userName, userPassword, userCreatedAt, userStatus, user_PersonId)
 VALUES
-('john_doe', 'password123', '2024-09-01', 1),
-('jane_smith', 'securepass', '2024-09-02', 2),
-('robert_johnson', 'robertpass', '2024-09-04', 3),
-('alice_johnson', 'alicepass', '2024-09-01', 6),
-('david_white', 'whitedavid', '2024-09-03', 7);
+('john_doe', 'password123', '2024-09-01', 1, 1),
+('jane_smith', 'securepass', '2024-09-02', 1, 2),
+('robert_johnson', 'robertpass', '2024-09-04', 1, 3),
+('alice_johnson', 'alicepass', '2024-09-01', 1, 6),
+('david_white', 'whitedavid', '2024-09-03', 1, 7);
 
 INSERT INTO BusinessArea (businessAreaName)
 VALUES
