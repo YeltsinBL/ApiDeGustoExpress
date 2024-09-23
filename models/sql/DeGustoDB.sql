@@ -1,36 +1,38 @@
--- Create a new database called 'DeGustoDB'
+-- Drop the database 'DeGustoDB'
 -- Connect to the 'master' database to run this snippet
 USE master
 GO
--- Create the new database if it does not exist already
-IF NOT EXISTS (
-    SELECT [name]
-        FROM sys.databases
-        WHERE [name] = N'DeGustoDB'
+
+IF EXISTS (
+  SELECT [name]
+    FROM sys.databases
+    WHERE [name] = N'DeGustoDB'
 )
+DROP DATABASE DeGustoDB
+GO
+
 CREATE DATABASE DeGustoDB
 GO
 use DeGustoDB
 GO
-CREATE TABLE Customers (
-  customerId INT PRIMARY KEY IDENTITY,
-  customerName VARCHAR(100) NOT NULL,
-  customerEmail VARCHAR(250),
-  customerPhoneNumber VARCHAR(9) NOT NULL
+CREATE TABLE PersonTypes (
+  personTypeId INT PRIMARY KEY IDENTITY,
+  personTypeName VARCHAR(100) NOT NULL,
+  personTypeStatus BIT
 );
-CREATE TABLE Owners (
-  ownerId INT PRIMARY KEY IDENTITY,
-  ownerName VARCHAR(100) NOT NULL,
-  ownerEmail VARCHAR(250) NOT NULL UNIQUE,
-  ownerPhoneNumber VARCHAR(9) NOT NULL
+CREATE TABLE Persons (
+  personId INT PRIMARY KEY IDENTITY,
+  personName VARCHAR(100) NOT NULL,
+  personEmail VARCHAR(250) NOT NULL UNIQUE,
+  personPhoneNumber VARCHAR(9) NOT NULL,
+  person_Type INT NULL REFERENCES PersonTypes(personTypeId)
 );
 CREATE TABLE Users (
   userId INT PRIMARY KEY IDENTITY,
   userName VARCHAR(100) NOT NULL,
   userPassword VARCHAR(250) NOT NULL,
   userCreatedAt DATE NOT NULL,
-  user_CustomerId INT NULL REFERENCES customers(customerId),
-  user_OwnerId INT NULL REFERENCES OWNERS(ownerId)
+  user_personId INT NULL REFERENCES Persons(personId)
 );
 CREATE TABLE BusinessArea(
     businessAreaId INT PRIMARY KEY IDENTITY,
@@ -46,7 +48,7 @@ CREATE TABLE Business (
   businessLatitude FLOAT,
   businessLongitude FLOAT,
   business_AreaId INT NOT NULL REFERENCES BusinessArea(businessAreaId),
-  business_OwnerId INT NULL REFERENCES Owners(ownerId)
+  business_UserId INT NULL REFERENCES Users(userId)
 );
 CREATE TABLE DishCategories (
   dishCategoryID INT PRIMARY KEY IDENTITY,
@@ -72,8 +74,8 @@ CREATE TABLE Reservations (
   reservationPaymentAmount DECIMAL(6,2) NOT NULL,
   reservationPaymentStatus INT NOT NULL,
   reservationPhoto VARCHAR(MAX) NOT NULL,
-  reservation_CustomerId INT NOT NULL REFERENCES Customers(customerId),
-  reservation_RestaurantId INT NOT NULL REFERENCES Business(businessId)
+  reservation_UserId INT NULL REFERENCES Users(userId),
+  reservation_BusinessId INT NOT NULL REFERENCES Business(businessId)
 );
 CREATE TABLE ReservationDetails (
   reservationDetailId INT NOT NULL IDENTITY,
@@ -86,7 +88,7 @@ CREATE TABLE reviews (
   reviewsId INT PRIMARY KEY IDENTITY,
   reviewRating INT CHECK (reviewRating >= 1 AND reviewRating <= 5),
   reviewComment VARCHAR(300),
-  review_CustomerId INT NOT NULL REFERENCES Customers(customerId),
+  review_UserId INT NULL REFERENCES Users(userId),
   review_BusinessId INT NOT NULL REFERENCES Business(businessId)
 );
 

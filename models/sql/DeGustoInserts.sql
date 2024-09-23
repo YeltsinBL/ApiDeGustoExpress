@@ -1,29 +1,32 @@
 USE DeGustoDB
 GO
 
-INSERT INTO Customers (customerName, customerEmail, customerPhoneNumber)
+INSERT INTO PersonTypes (personTypeName, personTypeStatus)
 VALUES
-('John Doe', 'johndoe@example.com', '123456789'),
-('Jane Smith', 'janesmith@example.com', '234567890'),
-('Robert Johnson', 'robertj@example.com', '345678901'),
-('Emily Davis', 'emilydavis@example.com', '456789012'),
-('Michael Brown', 'michaelb@example.com', '567890123');
+('Owner',1),
+('Customer',1)
 
-INSERT INTO Owners (ownerName, ownerEmail, ownerPhoneNumber)
-VALUES
-('Alice Johnson', 'alicej@example.com', '678901234'),
-('David White', 'davidw@example.com', '789012345'),
-('Laura Green', 'laurag@example.com', '890123456'),
-('Charles Black', 'charlesb@example.com', '901234567'),
-('Sophia Blue', 'sophiablue@example.com', '012345678');
 
-INSERT INTO Users (userName, userPassword, userCreatedAt, user_CustomerId, user_OwnerId)
+INSERT INTO Persons (personName, personEmail, personPhoneNumber, person_Type)
 VALUES
-('john_doe', 'password123', '2024-09-01', 1, NULL),
-('jane_smith', 'securepass', '2024-09-02', 2, NULL),
-('alice_johnson', 'alicepass', '2024-09-01', NULL, 1),
-('david_white', 'whitedavid', '2024-09-03', NULL, 2),
-('robert_johnson', 'robertpass', '2024-09-04', 3, NULL);
+('John Doe', 'johndoe@example.com', '123456789',1),
+('Jane Smith', 'janesmith@example.com', '234567890',1),
+('Robert Johnson', 'robertj@example.com', '345678901',1),
+('Emily Davis', 'emilydavis@example.com', '456789012',1),
+('Michael Brown', 'michaelb@example.com', '567890123',1),
+('Alice Johnson', 'alicej@example.com', '678901234',2),
+('David White', 'davidw@example.com', '789012345',2),
+('Laura Green', 'laurag@example.com', '890123456',2),
+('Charles Black', 'charlesb@example.com', '901234567',2),
+('Sophia Blue', 'sophiablue@example.com', '012345678',2);
+
+INSERT INTO Users (userName, userPassword, userCreatedAt, user_PersonId)
+VALUES
+('john_doe', 'password123', '2024-09-01', 1),
+('jane_smith', 'securepass', '2024-09-02', 2),
+('robert_johnson', 'robertpass', '2024-09-04', 3),
+('alice_johnson', 'alicepass', '2024-09-01', 6),
+('david_white', 'whitedavid', '2024-09-03', 7);
 
 INSERT INTO BusinessArea (businessAreaName)
 VALUES
@@ -32,7 +35,7 @@ VALUES
 ('Cines'),
 ('Tecnología'),
 ('Salud');
-INSERT INTO Business (businessName, businessAddress, businessPhoneNumber, businessStatus, businessLogo, businessLatitude, businessLongitude, business_AreaId, business_OwnerId)
+INSERT INTO Business (businessName, businessAddress, businessPhoneNumber, businessStatus, businessLogo, businessLatitude, businessLongitude, business_AreaId, business_UserId)
 VALUES
 ('La Buena Mesa', '123 Gourmet Street', '123456789', 1, 'restaurant_logo.png', 40.712776, -74.005974, 1, 1),
 ('Hotel Paraíso', '456 Luxury Avenue', '234567890', 1, 'hotel_logo.png', 34.052235, -118.243683, 2, 2),
@@ -55,7 +58,7 @@ VALUES
 ('Tiramisu', 'Postre italiano con café y queso mascarpone', 8.00, 'tiramisu.png', 1, 4),
 ('Cóctel de Mojito', 'Cóctel refrescante de ron con menta y lima', 7.00, 'mojito.png', 1, 5);
 
-INSERT INTO Reservations (reservationTime, reservationNumberPeople, reservationPaymentAmount, reservationPaymentStatus, reservationPhoto, reservation_CustomerId, reservation_RestaurantId)
+INSERT INTO Reservations (reservationTime, reservationNumberPeople, reservationPaymentAmount, reservationPaymentStatus, reservationPhoto, reservation_UserId, reservation_BusinessId)
 VALUES
 ('2024-09-10 19:30:00', 4, 50.00, 1, 'reservation1.png', 1, 1),
 ('2024-09-11 20:00:00', 2, 30.00, 1, 'reservation2.png', 2, 1),
@@ -73,7 +76,7 @@ VALUES
 (1, 7.00, 5, 3);   -- 1 Cóctel de Mojito para la tercera reserva
 
 -- Suponiendo que el CustomerId es 1 (John Doe) y el BusinessId del restaurante 'La Buena Mesa' es 1
-INSERT INTO Reviews (reviewRating, reviewComment, review_CustomerId, review_BusinessId)
+INSERT INTO Reviews (reviewRating, reviewComment, review_UserId, review_BusinessId)
 VALUES
 (5, 'Excelente comida y servicio, volveré sin duda.', 1, 1),
 (4, 'Muy buena experiencia, aunque el tiempo de espera fue largo.', 2, 1),
