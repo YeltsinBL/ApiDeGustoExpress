@@ -6,7 +6,7 @@ const routers = express.Router()
 routers.get('/', getItems)
 routers.get('/:id', getItemById)
 routers.post('/login', login)
-routers.post('/', createItem)
+routers.post('/register', createItem)
 routers.delete('/:id', deleteItemById)
 
 export default routers

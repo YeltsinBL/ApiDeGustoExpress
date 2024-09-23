@@ -112,32 +112,7 @@
         }
       }
     },
-    "/user": {
-        "get":{
-            "tags": [ "User" ],
-            "summary": "Lista de todos los usuarios",
-            "description": "Lista de los usuarios",
-            "operationId": "getUsers",
-            "parameters": [],
-            "responses": {
-                "200": {
-                    "description": "successful operation",
-                    "content": {
-                        "application/json":{
-                            "schema":{
-                                "type": "array",
-                                "items":{
-                                    "$ref": "#/components/schemas/Users"
-                                }
-                            }
-                        }
-                    }
-                },
-                "404": {
-                    "description": "No implementado"
-                }
-            }
-        },
+    "/user/register":{
         "post":{
             "tags": ["User"],
             "summary": "Crear cuenta del Usuario",
@@ -169,6 +144,33 @@
                 },
                 "422": {
                     "description": "Validation exception"
+                }
+            }
+        }
+    },
+    "/user": {
+        "get":{
+            "tags": [ "User" ],
+            "summary": "Lista de todos los usuarios",
+            "description": "Lista de los usuarios",
+            "operationId": "getUsers",
+            "parameters": [],
+            "responses": {
+                "200": {
+                    "description": "successful operation",
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "type": "array",
+                                "items":{
+                                    "$ref": "#/components/schemas/Users"
+                                }
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "No implementado"
                 }
             }
         }

@@ -3,11 +3,12 @@ import { httpError } from "../helpers/handleError.js"
 export const login = async(req, res)=>{
     try {
         const user = await getAccount({ input: req.body })
-        console.log(user.length)
-        if(user.length==0) return res.status(400).json({message:"Usuario o contraseña incorrectos"})
-        const [{userStatus}] = user
-        if(userStatus == 2) return res.status(403).json({message:"Cuenta suspendida."})
-        res.send(user[0])
+        if(user.codeStatus) return res.status(user.codeStatus).json({message:user.message})
+        
+        // if(user.length==0) return res.status(400).json({message:"Usuario o contraseña incorrectos"})
+        // const [{userStatus}] = user
+        // if(userStatus == 2) return res.status(403).json({message:"Cuenta suspendida."})
+        res.send(user)
     } catch (e) {
         httpError(res,e)
     }

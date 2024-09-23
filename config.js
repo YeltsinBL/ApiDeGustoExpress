@@ -1,0 +1,1 @@
+export const SALT_ROUNDS = 10 // numero significa que tanto se va a encriptar

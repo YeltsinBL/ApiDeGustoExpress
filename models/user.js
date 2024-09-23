@@ -1,17 +1,36 @@
+import { SALT_ROUNDS } from '../config.js'
 import {getConnection, mssql} from './sql/connection_sql.js'
+import bcrypt from 'bcrypt'
 export async function getAccount ({ input }) {
     try {
         const {userName, userPassword} = input
         const pool = await getConnection()
         let result = await pool.request()
                 .input('userName', mssql.VarChar, userName)
-                .input('userPassword', mssql.VarChar, userPassword)
-                .query('SELECT u.userId, u.userName, u.userStatus '+
-                        'FROM Users u '+
-                        'WHERE u.userName=@userName AND u.userPassword=@userPassword;'
-                    )
+                .query('SELECT uId=u.userId, uName=u.userName, uStatus=u.userStatus, userPasswordHash=u.userPassword '+
+                    'FROM Users u '+
+                    'WHERE u.userName=@userName;'
+                )
+        if(result.recordset.length==0) return {"codeStatus":400, "message":"Usuario incorrecto"}
+        const [{uId, uName, uStatus,userPasswordHash}] = result.recordset
+        const isValid = await bcrypt.compare(userPassword, userPasswordHash)
+        if(!isValid) return {"codeStatus":400, "message":"Contraseña incorrecta"};
+        if(uStatus == 2) return {"codeStatus":403, "message":"Cuenta suspendida."};
+
+        // let result = await pool.request()
+        //         .input('userName', mssql.VarChar, userName)
+        //         .input('userPassword', mssql.VarChar, userPassword)
+        //         .query('SELECT u.userId, u.userName, u.userStatus '+
+        //                 'FROM Users u '+
+        //                 'WHERE u.userName=@userName AND u.userPassword=@userPassword;'
+        //             )
         pool.close()
-        return result.recordset
+        // return result.recordset
+        return {
+            userId: uId,
+            userName: uName,
+            userStatus:uStatus
+        }
     } catch (error) {
       console.error(error)
     }
@@ -64,10 +83,12 @@ export async function create ({ input }) {
             'values(@personName, @personEmail, @personPhoneNumber, @personType); Select SCOPE_IDENTITY() as personId;')
       const [{ personId }] = resultPerson.recordset
 
+      // Encriptar la contraseña
+      const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS)
       const userStatus = personTypeId==1?0:1
       let resultUser = await pool.request()
         .input('userName',mssql.VarChar, userName)
-        .input('userPassword',mssql.VarChar, password)
+        .input('userPassword',mssql.VarChar, hashedPassword)
         .input('userStatus',mssql.Int, userStatus)
         .input('userCreatedAt',mssql.Date, createDate)
         .input('user_personId',mssql.Int, personId)
