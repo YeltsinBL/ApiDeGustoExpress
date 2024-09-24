@@ -148,6 +148,32 @@
             }
         }
     },
+    "/user/logout":{
+      "post": {
+        "tags": [ "User" ],
+        "summary": "Cerrar sesión",
+        "description": "",
+        "operationId": "logoutUser",
+        "responses": {
+          "200": {
+            "description": "Sesión cerrada",
+            "content": {
+                "application/json":{
+                    "schema":{
+                        "type": "object",
+                        "properties": {
+                            "message":{
+                                "type": "string",
+                                "example":"Sesión cerrada"
+                            }
+                        }
+                    }
+                }
+            }
+          }
+        }
+      }
+    },
     "/user": {
         "get":{
             "tags": [ "User" ],

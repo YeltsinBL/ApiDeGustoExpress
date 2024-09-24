@@ -69,3 +69,7 @@ export const createItem = async (req, res) => {
     const user = await create({ input: req.body })
     res.status(201).json(user)
 }
+export const logout = async (req, res) => {
+    res.clearCookie('access_token')
+    .json({ message: 'Sesión Cerrada' })
+}
