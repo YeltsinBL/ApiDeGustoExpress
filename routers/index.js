@@ -1,6 +1,7 @@
 import express from 'express'
 import fs from 'fs'
 import path from 'path'
+import jwt from 'jsonwebtoken'
 import { fileURLToPath } from 'url'
 
 const router = express.Router()
@@ -32,5 +33,19 @@ fs.readdirSync(pathRouter).filter(async (file) => {
         router.use(`/${fileWithOutExt}`, routeModule.default)
     }
 })
+
+// Middleware para verificar el token y devolver su información
+router.use((req, res, next) => {
+    const token = req.cookies.access_token
+    // Añadimos información a la petición para usarla en cualquier endpoint
+    req.session = { user: null }
+    try {
+      const data = jwt.verify(token, process.env.SECRET_JWT_KEY)
+      req.session.user = data
+    } catch (error) {
+      req.session.use = null
+    }
+    next() // sigue la ejecución a la siguiente ruta o middleware
+  })
 
 export default router

@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import router from './routers/index.js'
 import swaggerUI from 'swagger-ui-express'
 import cors from 'cors'
+import cookieParser from 'cookie-parser'
 import { readJson } from './utils.js'
 const swagger = readJson('./swagger.json')
 
@@ -15,6 +16,7 @@ app.use(express.json()) // permitir usar JSON
 
 app.disable('x-powered-by')
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser())
 
 app.use('/api', router)
 

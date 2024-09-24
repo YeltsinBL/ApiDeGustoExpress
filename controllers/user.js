@@ -1,5 +1,6 @@
 import { getAccount, getAll, getById, deleteById, create } from "../models/user.js"
 import { httpError } from "../helpers/handleError.js"
+import jwt from 'jsonwebtoken'
 export const login = async(req, res)=>{
     try {
         const user = await getAccount({ input: req.body })
@@ -8,13 +9,30 @@ export const login = async(req, res)=>{
         // if(user.length==0) return res.status(400).json({message:"Usuario o contraseña incorrectos"})
         // const [{userStatus}] = user
         // if(userStatus == 2) return res.status(403).json({message:"Cuenta suspendida."})
-        res.send(user)
+
+        // Creación de un token
+        const token = jwt.sign(
+            {id:user.userId, username:user.userName, userStatus:user.userStatus}, // Datos del usuario
+            process.env.SECRET_JWT_KEY, // Clave secreta
+            { expiresIn:'1h' } // tiempo de expiración
+        )
+
+        res
+        .cookie('access_token', token, {
+            httpOnly: true, // la cookie solo se puede acceder en el servidor
+            secure: process.env.NODE_ENV === 'production', // la cookie solo se puede acceder en producción
+            sameSite: 'strict', // la cookie solo se puede acceder en el mismo dominio
+            maxAge: 1000 * 60 * 60 // la cookie tiene un tiempo de validez de 1 hora
+          })
+        .send(user)
     } catch (e) {
         httpError(res,e)
     }
 }
 export const getItems = async(req, res)=>{
     try {
+        const { user } = req.session
+        if (!user) return res.status(403).send({ message:'Acceso no autorizado'})
         const listAll = await getAll()
         res.send(listAll)
 
