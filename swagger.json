@@ -866,6 +866,44 @@
                 }
             }
         }
+    },
+    "/dish/popular/{dishCategoryId}":{
+        "get":{
+            "tags": [ "Dish" ],
+            "summary": "Lista de los platos mas populares",
+            "description": "Lista de los 5 platos más vendidos por su categoría",
+            "operationId": "getPopularDish",
+            "parameters": [
+                {
+                    "name": "dishCategoryId",
+                    "in": "path",
+                    "description": "ID de la categoría del plato",
+                    "required": true,
+                    "schema": {
+                      "type": "integer",
+                      "format": "int64"
+                    }
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "successful operation",
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "type": "array",
+                                "items":{
+                                    "$ref": "#/components/schemas/Dish"
+                                }
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "No implementado"
+                }
+            }
+        }
     }
   },
   "components": {
@@ -1088,6 +1126,32 @@
                 "dishCategoryName":{
                     "type": "string",
                     "example":"Bebida"
+                }
+            }
+        },
+        "Dish":{
+            "type": "object",
+            "properties": {
+                "dishId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 0
+                },
+                "dishName":{
+                    "type": "string",
+                    "example":"Tallarín con pollo"
+                },
+                "dishDescription":{
+                    "type": "string",
+                    "example":"Descripción de lo que lleva el plato"
+                },
+                "dishPrice":{
+                    "type": "number",
+                    "example":20.00
+                },
+                "dishPhoto":{
+                    "type": "string",
+                    "example":"Ruta final donde esta almacenada la imagen"
                 }
             }
         }
