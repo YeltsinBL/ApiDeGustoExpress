@@ -201,6 +201,70 @@
             }
         }
     },
+    "/user/validateSession": {
+        "get":{
+            "tags": [ "User" ],
+            "summary": "Verificar si la sesión del usuario esta activo",
+            "description": "Sesión del usuarios",
+            "operationId": "validateSession",
+            "parameters": [],
+            "responses": {
+                "200": {
+                    "description": "successful operation",
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "id":{
+                                            "type": "integer",
+                                            "format": "int64",
+                                            "example":0
+                                        },
+                                        "username":{
+                                            "type": "string",
+                                            "example":"alice_johnson"
+                                        },
+                                        "userStatus":{
+                                            "type": "integer",
+                                            "example":0
+                                        },
+                                        "iat":{
+                                            "type": "integer",
+                                            "example":0
+                                        },
+                                        "exp":{
+                                            "type": "integer",
+                                            "example":0
+                                        }
+                                    }
+                                
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "No implementado"
+                },
+                "403": {
+                    "description": "Sesión no activa",
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "type": "object",
+                                "properties": {
+                                    "message":{
+                                        "type": "string",
+                                        "example":"Sesión no activa"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
     "/user/{id}":{
         "get":{
             "tags": [ "User" ],

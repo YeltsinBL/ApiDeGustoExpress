@@ -29,6 +29,16 @@ export const login = async(req, res)=>{
         httpError(res,e)
     }
 }
+export const validateSession = async(req, res) => {
+    try {
+        const { user } = req.session
+        if (!user) return res.status(403).send({ message:'Acceso no autorizado'})
+        res.send(user)
+
+    } catch (e) {
+        httpError(res,e)
+    }
+}
 export const getItems = async(req, res)=>{
     try {
         const { user } = req.session
