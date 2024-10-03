@@ -1,8 +1,8 @@
 import express from 'express'
-import {getItems} from '../controllers/dish.js'
+import { getListDishCategory } from '../controllers/dish.js'
 
 const routers = express.Router()
 
-routers.get('/dishCategory', getItems)
+routers.get('/dishCategory', getListDishCategory)
 
 export default routers

@@ -1,7 +1,7 @@
 
 import {getConnection} from './sql/connection_sql.js'
 
-export async function getAll() {
+export async function getDishCategory() {
     try {
         const pool = await getConnection()
         let result = await pool.request()

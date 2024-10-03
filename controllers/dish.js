@@ -1,9 +1,9 @@
-import { getAll } from "../models/dish.js"
+import { getDishCategory } from "../models/dish.js"
 import { httpError } from "../helpers/handleError.js"
 
-export const getItems = async(req, res)=>{
+export const getListDishCategory = async(req, res)=>{
     try {
-        const listAll = await getAll()
+        const listAll = await getDishCategory()
         res.send(listAll)
     } catch (e) {
         httpError(res,e)
