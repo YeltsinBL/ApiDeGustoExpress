@@ -37,6 +37,10 @@
     {
       "name": "Image",
       "description": "Modulo de Imágenes"
+    },
+    {
+      "name": "Dish",
+      "description": "Modulo de los platos"
     }
   ],
   "paths": {
@@ -835,6 +839,33 @@
                 }
             }
         }
+    },
+    "/dish/dishCategory":{
+        "get":{
+            "tags": [ "Dish" ],
+            "summary": "Lista de todas las categorías de los platos",
+            "description": "Lista de las primeras 5 categorías de los platos más vendidos",
+            "operationId": "getDishCategory",
+            "parameters": [],
+            "responses": {
+                "200": {
+                    "description": "successful operation",
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "type": "array",
+                                "items":{
+                                    "$ref": "#/components/schemas/CategoryDish"
+                                }
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "No implementado"
+                }
+            }
+        }
     }
   },
   "components": {
@@ -1045,6 +1076,20 @@
             },
             "required": ["file", "businessName", "businessAddress","businessPhoneNumber",
         "businessStatus","businessLatitude","businessLongitude","business_AreaId","business_OwnerId"]
+        },
+        "CategoryDish":{
+            "type": "object",
+            "properties": {
+                "dishCategoryID":{
+                    "type": "integer",
+                    "format": "int64",
+                    "example":0
+                },
+                "dishCategoryName":{
+                    "type": "string",
+                    "example":"Bebida"
+                }
+            }
         }
     }
   }
