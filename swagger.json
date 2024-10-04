@@ -1060,12 +1060,12 @@
                     "format": "int64",
                     "example": -74.005974
                 },
-                "AverageRating": {
+                "businessAverageRating": {
                     "type": "integer",
                     "format": "int64",
                     "example": 1
                 },
-                "TotalReviews": {
+                "businessTotalReviews": {
                     "type": "integer",
                     "format": "int64",
                     "example": 5

@@ -53,23 +53,17 @@ export async function getPopularBusiness() {
     const pool = await getConnection()
     let result = await pool.request()
           .query('SELECT TOP 5 [b].[businessId], ' +
-            ' [b].[businessName], ' +
-            ' [b].[businessAddress], ' +
-            ' [b].[businessPhoneNumber], ' +
-            ' [b].[businessStatus], ' +
-            ' [b].[businessLogo], ' +
-            ' [b].[businessLatitude], ' +
-            ' [b].[businessLongitude], AVG(rw.reviewRating) AS AverageRating, COUNT(rw.reviewsId) AS TotalReviews ' +
+            ' [b].[businessName], [b].[businessAddress], ' +
+            ' [b].[businessPhoneNumber], [b].[businessStatus], ' +
+            ' [b].[businessLogo], [b].[businessLatitude], ' +
+            ' [b].[businessLongitude], AVG(rw.reviewRating) AS businessAverageRating, ' +
+            ' COUNT(rw.reviewsId) AS businessTotalReviews ' +
             ' FROM Business b ' +
             ' JOIN Reviews rw ON b.businessId = rw.review_BusinessId ' +
-            ' GROUP BY [b].[businessId], ' +
-            ' [b].[businessName], ' +
-            ' [b].[businessAddress], ' +
-            ' [b].[businessPhoneNumber], ' +
-            ' [b].[businessStatus], ' +
-            ' [b].[businessLogo], ' +
-            ' [b].[businessLatitude], ' +
-            ' [b].[businessLongitude] ' +
+            ' GROUP BY [b].[businessId], [b].[businessName], ' +
+            ' [b].[businessAddress], [b].[businessPhoneNumber], ' +
+            ' [b].[businessStatus], [b].[businessLogo], ' +
+            ' [b].[businessLatitude], [b].[businessLongitude] ' +
             ' HAVING COUNT(rw.reviewsId) > 0 ' +
             ' ORDER BY AverageRating DESC;')
     pool.close()
