@@ -65,9 +65,8 @@ const uploadSingleImageAsync = (req, res) => {
 };
 export const getItems = async(req, res)=>{
     try {
-        const input = req.query;
-        if(input.userType==2) return res.status(404).json({ message: 'No tienes acceso' })
-        const listAll = await getAll({input})
+        const listAll = await getAll({input: req.query})
+        if(listAll.codeStatus) return res.status(listAll.codeStatus).json({message:listAll.message})
         res.send(listAll)
 
     } catch (e) {

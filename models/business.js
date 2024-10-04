@@ -1,13 +1,25 @@
 import {getConnection, mssql} from './sql/connection_sql.js'
 export async function getAll({input}) {
     try {
-      console.log(input)
-      const {userType, userTypeId} = input
-      console.log(parseInt(userType),parseInt(userTypeId))
-        const pool = await getConnection()
+
+      const { userId } = input
+      const pool = await getConnection()
+
+      let valid = await pool.request()
+                .input('userId', mssql.Int, userId)
+                .query('SELECT p.person_Type FROM Persons p ' +
+                    ' JOIN Users u ON u.user_personId=p.personId '+
+                    ' WHERE u.userId=@userId;'
+                )
+      if(valid.recordset.length==0) return {"codeStatus":400, "message":"No tienes acceso"}
+      const [{person_Type}] = valid.recordset
+
+      if(parseInt(person_Type)==2) return {"codeStatus":400, "message":"No tienes acceso"}
+      // console.log(parseInt(person_Type),parseInt(userId))
+
         let addWhere = ''
-        if(parseInt(userType)==1) {
-          addWhere='where business_OwnerId='+parseInt(userTypeId)}
+        if(parseInt(person_Type)==1) {
+          addWhere='where business_UserId='+parseInt(userId)}
         let result = await pool.request().query('select * from dbo.Business '+addWhere)
         pool.close()
         return result.recordset
@@ -70,7 +82,7 @@ export async function create({input}) {
     const {
       businessName, businessAddress,  businessPhoneNumber,
       businessStatus, businessLogo, businessLatitude,
-      businessLongitude, business_AreaId, business_OwnerId
+      businessLongitude, business_AreaId, business_UserId
     } = input
 
     const pool = await getConnection()
@@ -83,12 +95,12 @@ export async function create({input}) {
           .input('businessLatitude',mssql.Float,businessLatitude)
           .input('businessLongitude',mssql.Float,businessLongitude)
           .input('business_AreaId',mssql.Int,business_AreaId)
-          .input('business_OwnerId',mssql.Int,business_OwnerId)
+          .input('business_UserId',mssql.Int,business_UserId)
           .query('Insert into Business (businessName,businessAddress,businessPhoneNumber, '+
             'businessStatus, businessLogo, businessLatitude, businessLongitude, '+
-            'business_AreaId, business_OwnerId)' +
+            'business_AreaId, business_UserId)' +
             'values(@businessName, @businessAddress, @businessPhoneNumber, @businessStatus, '+
-            '@businessLogo, @businessLatitude, @businessLongitude, @business_AreaId, @business_OwnerId); '+
+            '@businessLogo, @businessLatitude, @businessLongitude, @business_AreaId, @business_UserId); '+
             'Select SCOPE_IDENTITY() as businessId;')
     pool.close()
     const [{businessId}] = result.recordset
@@ -102,7 +114,7 @@ export async function create({input}) {
       'businessLatitude':businessLatitude,
       'businessLongitude':businessLongitude,
       'business_AreaId':business_AreaId,
-      'business_OwnerId':business_OwnerId
+      'business_UserId':business_UserId
     }        
   } catch (error) {
     console.error(error)
@@ -116,7 +128,7 @@ export async function upload({input}) {
       businessId, businessName, businessAddress,
       businessPhoneNumber, businessStatus, businessLogo,
       businessLatitude, businessLongitude, business_AreaId,
-      business_OwnerId
+      business_UserId
     } = input
 
     const pool = await getConnection()
@@ -147,7 +159,7 @@ export async function upload({input}) {
       'businessLatitude':businessLatitude,
       'businessLongitude':businessLongitude,
       'business_AreaId':business_AreaId,
-      'business_OwnerId':business_OwnerId
+      'business_UserId':business_UserId
     }   
   } catch (error) {
     

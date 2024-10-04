@@ -376,19 +376,9 @@
             "operationId": "getBusiness",
             "parameters": [
                 {
-                    "name": "userType",
+                    "name": "userId",
                     "in": "query",
-                    "description": "Tipo de Usuario ",
-                    "required": true,
-                    "schema": {
-                        "type": "integer",
-                        "example":0
-                    }
-                },
-                {
-                    "name": "userTypeId",
-                    "in": "query",
-                    "description": "Id del Tipo de Usuario ",
+                    "description": "Id del Usuario para ver sus negocios",
                     "required": true,
                     "schema": {
                         "type": "integer",
@@ -983,7 +973,7 @@
                     "format": "int64",
                     "example": 1
                 },
-                "business_OwnerId": {
+                "business_UserId": {
                     "type": "integer",
                     "format": "int64",
                     "example": 1
