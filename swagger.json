@@ -494,6 +494,47 @@
             }
         }
     },
+    "/business/popular":{
+        "get":{
+            "tags": [
+                "Business"
+            ],
+            "summary": "Lista de los negocios más populares",
+            "description": "Lista de los 5 negocios más populares",
+            "operationId": "getBusinessPopular",
+            "responses": {
+                "200":{
+                    "description": "successful operation",
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "type": "array",
+                                "items":{
+                                    "$ref": "#/components/schemas/BusinessMovil"
+                                }
+                            }
+                        }
+                    }
+                },
+                "400": {
+                  "description": "Negocio no encontrado",
+                  "content": {
+                      "application/json":{
+                          "schema":{
+                              "type": "object",
+                              "properties": {
+                                  "message":{
+                                      "type": "string",
+                                      "example":"Negocios no encontrados"
+                                  }
+                              }
+                          }
+                      }
+                  }
+                }
+            }
+        }
+    },
     "/business/{id}":{
         "get":{
             "tags": [
@@ -860,7 +901,7 @@
     "/dish/popular/{dishCategoryId}":{
         "get":{
             "tags": [ "Dish" ],
-            "summary": "Lista de los platos mas populares",
+            "summary": "Lista de los platos más populares",
             "description": "Lista de los 5 platos más vendidos por su categoría",
             "operationId": "getPopularDish",
             "parameters": [
@@ -977,6 +1018,57 @@
                     "type": "integer",
                     "format": "int64",
                     "example": 1
+                }
+            }
+        },
+        "BusinessMovil":{
+            "type": "object",
+            "properties": {
+                "businessId":{
+                    "type": "integer",
+                    "format": "int64",
+                    "example":0
+                },
+                "businessName":{
+                    "type": "string",
+                    "example":"La Buena Mesa"
+                },
+                "businessAddress":{
+                    "type": "string",
+                    "example":"123 Gourmet Street"
+                },
+                "businessPhoneNumber":{
+                    "type": "string",
+                    "example":"123456789"
+                },
+                "businessStatus":{
+                    "type": "integer",
+                    "format": "int64",
+                    "example":1
+                },
+                "businessLogo":{
+                    "type": "string",
+                    "example":"restaurant_logo.png"
+                },
+                "businessLatitude":{
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 40.712776
+                },
+                "businessLongitude":{
+                    "type": "integer",
+                    "format": "int64",
+                    "example": -74.005974
+                },
+                "AverageRating": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 1
+                },
+                "TotalReviews": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 5
                 }
             }
         },

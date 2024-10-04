@@ -48,6 +48,36 @@ export async function getAllMobile() {
     console.error(error)
   }
 }
+export async function getPopularBusiness() {
+  try{
+    const pool = await getConnection()
+    let result = await pool.request()
+          .query('SELECT TOP 5 [b].[businessId], ' +
+            ' [b].[businessName], ' +
+            ' [b].[businessAddress], ' +
+            ' [b].[businessPhoneNumber], ' +
+            ' [b].[businessStatus], ' +
+            ' [b].[businessLogo], ' +
+            ' [b].[businessLatitude], ' +
+            ' [b].[businessLongitude], AVG(rw.reviewRating) AS AverageRating, COUNT(rw.reviewsId) AS TotalReviews ' +
+            ' FROM Business b ' +
+            ' JOIN Reviews rw ON b.businessId = rw.review_BusinessId ' +
+            ' GROUP BY [b].[businessId], ' +
+            ' [b].[businessName], ' +
+            ' [b].[businessAddress], ' +
+            ' [b].[businessPhoneNumber], ' +
+            ' [b].[businessStatus], ' +
+            ' [b].[businessLogo], ' +
+            ' [b].[businessLatitude], ' +
+            ' [b].[businessLongitude] ' +
+            ' HAVING COUNT(rw.reviewsId) > 0 ' +
+            ' ORDER BY AverageRating DESC;')
+    pool.close()
+    return result.recordset
+  }catch (error) {
+    console.error(error)
+  }
+}
 
 export async function getById({id}) {
     try {
