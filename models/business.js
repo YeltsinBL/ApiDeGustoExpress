@@ -65,7 +65,7 @@ export async function getPopularBusiness() {
             ' [b].[businessStatus], [b].[businessLogo], ' +
             ' [b].[businessLatitude], [b].[businessLongitude] ' +
             ' HAVING COUNT(rw.reviewsId) > 0 ' +
-            ' ORDER BY AverageRating DESC;')
+            ' ORDER BY businessAverageRating DESC;')
     pool.close()
     return result.recordset
   }catch (error) {
