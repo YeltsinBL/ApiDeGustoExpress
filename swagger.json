@@ -502,6 +502,28 @@
             "summary": "Lista de los negocios más populares",
             "description": "Lista de los 5 negocios más populares",
             "operationId": "getBusinessPopular",
+            "parameters": [
+                {
+                    "name": "latitude",
+                    "in": "query",
+                    "description": "Longitud de la ubicación del usuario",
+                    "required": true,
+                    "schema": {
+                        "type": "number",
+                        "example": -8.074157889449705
+                    }
+                },
+                {
+                    "name": "longitude",
+                    "in": "query",
+                    "description": "Latitud de la ubicación del usuario",
+                    "required": true,
+                    "schema": {
+                        "type": "number",
+                        "example": -79.05579181295246
+                    }
+                }
+            ],
             "responses": {
                 "200":{
                     "description": "successful operation",
@@ -1069,6 +1091,10 @@
                     "type": "integer",
                     "format": "int64",
                     "example": 5
+                },
+                "businessDistance": {
+                    "type": "string",
+                    "example": "5448.94 km"
                 }
             }
         },

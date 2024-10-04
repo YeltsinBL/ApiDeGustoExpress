@@ -84,7 +84,7 @@ export const getItemsMobile = async(req, res)=>{
 }
 export const getItemsPopular = async(req, res)=>{
     try {
-        const listAll = await getPopularBusiness()
+        const listAll = await getPopularBusiness({input: req.query})
         res.send(listAll)
     } catch (e) {
         httpError(res,e)
