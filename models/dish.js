@@ -39,3 +39,18 @@ export async function getPopularDish({dishCategoryId}) {
       console.error(error)
     }
 }
+
+export async function getDishByBusinessId({dishBusinessId}) {
+    try {
+        const pool = await getConnection()
+        let result = await pool.request()
+                        .input('dishBusinessId',mssql.Int,dishBusinessId)
+                        .query('SELECT d.dishId, d.dishName, d.dishDescription, d.dishPrice, d.dishPhoto ' +
+                            ' FROM Dishes d ' +
+                            ' WHERE d.dish_BusinessId = @dishBusinessId ')
+        pool.close()
+        return result.recordset
+    } catch (error) {
+      console.error(error)
+    }
+}
