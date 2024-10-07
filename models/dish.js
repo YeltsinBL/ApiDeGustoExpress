@@ -54,3 +54,39 @@ export async function getDishByBusinessId({dishBusinessId}) {
       console.error(error)
     }
 }
+export async function create({input}) {
+    try {
+      const {
+        dishName,  dishDescription,
+        dishPrice, dishPhoto, dish_BusinessId,
+        dish_CategoriesId
+      } = input
+  
+      const pool = await getConnection()
+      let result = await pool.request()
+            .input('dishName',mssql.VarChar,dishName)
+            .input('dishDescription',mssql.VarChar,dishDescription)
+            .input('dishPrice',mssql.Float,dishPrice)
+            .input('dishPhoto',mssql.VarChar,dishPhoto)
+            .input('dish_BusinessId',mssql.Int,dish_BusinessId)
+            .input('dish_CategoriesId',mssql.Int,dish_CategoriesId)
+            .query('Insert into Dishes (dishName,dishDescription,dishPrice, '+
+              'dishPhoto, dish_BusinessId, dish_CategoriesId)' +
+              'values(@dishName, @dishDescription, @dishPrice, @dishPhoto, '+
+              '@dish_BusinessId, @dish_CategoriesId); '+
+              'Select SCOPE_IDENTITY() as dishId;')
+      pool.close()
+      const [{dishId}] = result.recordset
+      return {
+        'dishId':dishId,
+        'dishName':dishName,
+        'dishDescription':dishDescription,
+        'dishPrice':dishPrice,
+        'dishPhoto':dishPhoto,
+        'dish_BusinessId':dish_BusinessId,
+        'dish_CategoriesId':dish_CategoriesId
+      }        
+    } catch (error) {
+      console.error(error)
+    }
+  }

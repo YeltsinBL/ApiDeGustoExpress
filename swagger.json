@@ -995,6 +995,42 @@
                 }
             }
         }
+    },
+    "/dish":{
+        "post":{
+            "tags": ["Dish"],
+            "summary": "Crear un plato",
+            "description": "Registrar un plato",
+            "operationId": "createDish",
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Dish"
+                        }
+                    }
+                },
+                "required": true
+            },
+            "responses": {
+                "201": {
+                    "description": "successful operation",
+                    "content": {
+                    "application/json": {
+                        "schema": {
+                        "$ref": "#/components/schemas/Dish"
+                        }
+                    }
+                    }
+                },
+                "400": {
+                    "description": "Invalid input"
+                },
+                "422": {
+                    "description": "Validation exception"
+                }
+            }
+        }
     }
   },
   "components": {
@@ -1298,6 +1334,16 @@
                 "dishPhoto":{
                     "type": "string",
                     "example":"Ruta final donde esta almacenada la imagen"
+                },
+                "dish_BusinessId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 0
+                },
+                "dish_CategoriesId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 0
                 }
             }
         }
