@@ -90,3 +90,52 @@ export async function create({input}) {
       console.error(error)
     }
   }
+  export async function update({input}) {
+    try {
+      const {
+        dishId, dishName,  dishDescription,
+        dishPrice, dishPhoto, dish_BusinessId,
+        dish_CategoriesId
+      } = input
+  
+      const pool = await getConnection()
+      await pool.request()
+            .input('dishId',mssql.Int,dishId)
+            .input('dishName',mssql.VarChar,dishName)
+            .input('dishDescription',mssql.VarChar,dishDescription)
+            .input('dishPrice',mssql.Float,dishPrice)
+            .input('dishPhoto',mssql.VarChar,dishPhoto)
+            .input('dish_BusinessId',mssql.Int,dish_BusinessId)
+            .input('dish_CategoriesId',mssql.Int,dish_CategoriesId)
+            .query('Update Dishes set dishName=@dishName, '+
+              'dishDescription=@dishDescription, dishPrice=@dishPrice, dishPhoto=@dishPhoto, ' +
+              'dish_BusinessId=@dish_BusinessId, dish_CategoriesId=@dish_CategoriesId '+
+              'where dishId=@dishId;')
+      pool.close()
+      return {
+        'dishId':dishId,
+        'dishName':dishName,
+        'dishDescription':dishDescription,
+        'dishPrice':dishPrice,
+        'dishPhoto':dishPhoto,
+        'dish_BusinessId':dish_BusinessId,
+        'dish_CategoriesId':dish_CategoriesId
+      }        
+    } catch (error) {
+      console.error(error)
+    }
+}
+export async function deleteById({ id }) {
+    try {
+      const pool = await getConnection()
+      await pool.request()
+        .input('dishId', mssql.Int, id)
+        .query(
+          'delete from Dishes WHERE dishId=@dishId')
+
+      pool.close()
+      return true
+    } catch (error) {
+      console.log(error)
+    }
+}

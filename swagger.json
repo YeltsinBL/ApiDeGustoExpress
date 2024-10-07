@@ -1030,6 +1030,82 @@
                     "description": "Validation exception"
                 }
             }
+        },
+        "put":{
+            "tags": ["Dish"],
+            "summary": "Editar un plato",
+            "description": "Modificar un plato",
+            "operationId": "updateDish",
+            "requestBody": {
+                "content": {
+                    "multipart/form-data": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Dish"
+                        }
+                    }
+                },
+                "required": true
+            },
+            "responses": {
+                "200": {
+                    "description": "successful operation",
+                    "content": {
+                    "application/json": {
+                        "schema": {
+                        "$ref": "#/components/schemas/Dish"
+                        }
+                    }
+                    }
+                },
+                "400": {
+                    "description": "Invalid input"
+                },
+                "422": {
+                    "description": "Validation exception"
+                }
+            }
+        }
+    },
+    "/dish/{id}":{
+        "delete":{
+            "tags": [
+                "Dish"
+            ],
+            "summary": "Eliminar un plato",
+            "description": "Enviar el ID del plato para eliminarlo",
+            "operationId": "deleteDishById",
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID del plato a buscar",
+                    "required": true,
+                    "schema": {
+                      "type": "integer",
+                      "format": "int64"
+                    }
+                }
+            ],"responses": {
+                "200":{
+                    "description": "successful operation",
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "type": "object",
+                                "properties": {
+                                    "message":{
+                                        "type": "string",
+                                        "example":"Plato eliminado"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "Negocio no encontrado"
+                }
+            }
         }
     }
   },
@@ -1344,6 +1420,11 @@
                     "type": "integer",
                     "format": "int64",
                     "example": 0
+                },
+                "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "La imagen a subir"
                 }
             }
         }
