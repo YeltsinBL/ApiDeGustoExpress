@@ -1,4 +1,5 @@
 import { create, deleteById, getDishByBusinessId, getDishCategory, getPopularDish, update } from "../models/dish.js"
+import {uploadSingleImageAsync} from "./business.js"
 import { httpError } from "../helpers/handleError.js"
 
 export const getListDishCategory = async(req, res)=>{
@@ -42,11 +43,13 @@ export const createItem = async (req, res) => {
 }
 export const updateItem = async(req, res) =>{
     try {
-        // console.log('aquí')
-        // await uploadSingleImageAsync(req,res)
+        // Verificar imagen
+        await uploadSingleImageAsync(req,res)
+
         // const {id} = req.params
         // req.body.businessId = id
         // if(req.file) req.body.businessLogo = req.file.path
+        console.log(req.body)
         const result = await update({input: req.body})
         res.status(200).json(result)
     } catch (error) {

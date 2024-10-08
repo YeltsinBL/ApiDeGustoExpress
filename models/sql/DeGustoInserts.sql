@@ -50,23 +50,23 @@ VALUES
 ('Acompañamientos', '2024-09-01', NULL, 'admin', NULL),
 ('Postres', '2024-09-01', NULL, 'admin', NULL),
 ('Bebidas', '2024-09-01', NULL, 'admin', NULL);
-INSERT INTO Dishes (dishName, dishDescription, dishPrice, dishPhoto, dish_BusinessId, dish_CategoriesId)
+INSERT INTO Dishes (dishName, dishDescription, dishPrice, dishPhoto, dishStatus, dish_BusinessId, dish_CategoriesId)
 VALUES
-('Ensalada César', 'Ensalada con pollo, queso parmesano y aderezo César', 12.50, 'ensalada_cesar.png', 1, 1),
-('Filete Mignon', 'Filete de res a la parrilla con salsa de champiñones', 25.00, 'filete_mignon.png', 1, 2),
-('Papas Fritas', 'Papas fritas crujientes y doradas', 5.00, 'papas_fritas.png', 1, 3),
-('Tiramisu', 'Postre italiano con café y queso mascarpone', 8.00, 'tiramisu.png', 1, 4),
-('Cóctel de Mojito', 'Cóctel refrescante de ron con menta y lima', 7.00, 'mojito.png', 1, 5),
-('Sopa de Tomate', 'Sopa cremosa de tomate con albahaca fresca', 8.50, 'sopa_tomate.png', 1, 1), -- Entrada
-('Risotto de Champiñones', 'Risotto cremoso con champiñones frescos y queso parmesano', 18.00, 'risotto_champ.png', 1, 2), -- Plato principal
-('Tarta de Limón', 'Postre cítrico con base crujiente y crema de limón', 7.50, 'tarta_limon.png', 1, 4), -- Postre
-('Papas Gajo', 'Papas gajo sazonadas con hierbas y especias', 6.00, 'papas_gajo.png', 1, 3), -- Acompañamiento
-('Jugo de Naranja', 'Jugo de naranja fresco y natural', 4.00, 'jugo_naranja.png', 1, 5), -- Bebida
-('Bruschetta', 'Tostadas con tomate, albahaca y aceite de oliva', 9.00, 'bruschetta.png', 1, 1), -- Entrada
-('Pollo a la Parmesana', 'Pechuga de pollo empanizada con salsa de tomate y queso', 20.00, 'pollo_parmesana.png', 1, 2), -- Plato principal
-('Helado de Vainilla', 'Helado artesanal de vainilla con caramelo', 6.50, 'helado_vainilla.png', 1, 4), -- Postre
-('Ensalada Griega', 'Ensalada fresca con pepino, tomate, cebolla y queso feta', 10.00, 'ensalada_griega.png', 1, 1), -- Entrada
-('Limonada', 'Limonada casera refrescante', 3.50, 'limonada.png', 1, 5); -- Bebida
+('Ensalada César', 'Ensalada con pollo, queso parmesano y aderezo César', 12.50, 'ensalada_cesar.png', 1, 1, 1),
+('Filete Mignon', 'Filete de res a la parrilla con salsa de champiñones', 25.00, 'filete_mignon.png', 1, 1, 2),
+('Papas Fritas', 'Papas fritas crujientes y doradas', 5.00, 'papas_fritas.png', 1, 1, 3),
+('Tiramisu', 'Postre italiano con café y queso mascarpone', 8.00, 'tiramisu.png', 1, 1, 4),
+('Cóctel de Mojito', 'Cóctel refrescante de ron con menta y lima', 7.00, 'mojito.png', 1, 1, 5),
+('Sopa de Tomate', 'Sopa cremosa de tomate con albahaca fresca', 8.50, 'sopa_tomate.png', 1, 1, 1), -- Entrada
+('Risotto de Champiñones', 'Risotto cremoso con champiñones frescos y queso parmesano', 18.00, 'risotto_champ.png', 1, 1, 2), -- Plato principal
+('Tarta de Limón', 'Postre cítrico con base crujiente y crema de limón', 7.50, 'tarta_limon.png', 1, 1, 4), -- Postre
+('Papas Gajo', 'Papas gajo sazonadas con hierbas y especias', 6.00, 'papas_gajo.png', 1, 1, 3), -- Acompañamiento
+('Jugo de Naranja', 'Jugo de naranja fresco y natural', 4.00, 'jugo_naranja.png', 1, 1, 5), -- Bebida
+('Bruschetta', 'Tostadas con tomate, albahaca y aceite de oliva', 9.00, 'bruschetta.png', 1, 1, 1), -- Entrada
+('Pollo a la Parmesana', 'Pechuga de pollo empanizada con salsa de tomate y queso', 20.00, 'pollo_parmesana.png', 1, 1, 2), -- Plato principal
+('Helado de Vainilla', 'Helado artesanal de vainilla con caramelo', 6.50, 'helado_vainilla.png', 1, 1, 4), -- Postre
+('Ensalada Griega', 'Ensalada fresca con pepino, tomate, cebolla y queso feta', 10.00, 'ensalada_griega.png', 1, 1, 1), -- Entrada
+('Limonada', 'Limonada casera refrescante', 3.50, 'limonada.png', 1, 1, 5); -- Bebida
 
 INSERT INTO Reservations (reservationTime, reservationNumberPeople, reservationPaymentAmount, reservationPaymentStatus, reservationPhoto, reservation_UserId, reservation_BusinessId)
 VALUES

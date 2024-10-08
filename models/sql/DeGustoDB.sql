@@ -65,6 +65,7 @@ CREATE TABLE Dishes (
   dishDescription VARCHAR(300),
   dishPrice DECIMAL(6, 2) NOT NULL,
   dishPhoto VARCHAR(MAX),
+  dishStatus BIT NOT NULL,
   dish_BusinessId INT NOT NULL REFERENCES Business(businessId),
   dish_CategoriesId INT NOT NULL REFERENCES DishCategories(dishCategoryID)
 );

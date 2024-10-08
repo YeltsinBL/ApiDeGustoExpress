@@ -52,7 +52,8 @@ const storage = multer.diskStorage({
 const uploadImage = multer({ storage: storage, fileFilter: imageFilter })
 
 const uploadSingleImage = uploadImage.single('file')
-const uploadSingleImageAsync = (req, res) => {
+export const uploadSingleImageAsync = (req, res) => {
+    console.log(req.body)
     return new Promise((resolve, reject) => {
         uploadSingleImage(req, res, (err) => {
             if (err) {

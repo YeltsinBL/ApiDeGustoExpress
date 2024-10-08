@@ -29,7 +29,7 @@ export async function getPopularDish({dishCategoryId}) {
                             ' SELECT TOP 5 d.dishId, d.dishName, d.dishDescription, d.dishPrice, d.dishPhoto, COUNT(rd.detail_DishID) AS TotalReservations ' +
                             ' FROM Dishes d ' +
                             ' JOIN ReservationDetails rd ON d.dishId = rd.detail_DishID ' +
-                            ' WHERE d.dish_CategoriesId = @dishCategoryId '+
+                            ' WHERE d.dish_CategoriesId = @dishCategoryId AND d.dishStatus=1 '+
                             ' GROUP BY d.dishId, d.dishName, d.dishDescription, d.dishPrice, d.dishPhoto ' +
                             ' ORDER BY TotalReservations DESC ' +
                             ' ) as X;')
@@ -45,7 +45,7 @@ export async function getDishByBusinessId({dishBusinessId}) {
         const pool = await getConnection()
         let result = await pool.request()
                         .input('dishBusinessId',mssql.Int,dishBusinessId)
-                        .query('SELECT d.dishId, d.dishName, d.dishDescription, d.dishPrice, d.dishPhoto ' +
+                        .query('SELECT d.dishId, d.dishName, d.dishDescription, d.dishPrice, d.dishPhoto, d.dishStatus ' +
                             ' FROM Dishes d ' +
                             ' WHERE d.dish_BusinessId = @dishBusinessId ')
         pool.close()
@@ -71,8 +71,8 @@ export async function create({input}) {
             .input('dish_BusinessId',mssql.Int,dish_BusinessId)
             .input('dish_CategoriesId',mssql.Int,dish_CategoriesId)
             .query('Insert into Dishes (dishName,dishDescription,dishPrice, '+
-              'dishPhoto, dish_BusinessId, dish_CategoriesId)' +
-              'values(@dishName, @dishDescription, @dishPrice, @dishPhoto, '+
+              'dishPhoto, dishStatus, dish_BusinessId, dish_CategoriesId)' +
+              'values(@dishName, @dishDescription, @dishPrice, @dishPhoto, 1, '+
               '@dish_BusinessId, @dish_CategoriesId); '+
               'Select SCOPE_IDENTITY() as dishId;')
       pool.close()
@@ -83,6 +83,7 @@ export async function create({input}) {
         'dishDescription':dishDescription,
         'dishPrice':dishPrice,
         'dishPhoto':dishPhoto,
+        'dishStatus':true,
         'dish_BusinessId':dish_BusinessId,
         'dish_CategoriesId':dish_CategoriesId
       }        
@@ -94,7 +95,7 @@ export async function create({input}) {
     try {
       const {
         dishId, dishName,  dishDescription,
-        dishPrice, dishPhoto, dish_BusinessId,
+        dishPrice, dishPhoto, dishStatus, dish_BusinessId,
         dish_CategoriesId
       } = input
   
@@ -105,11 +106,12 @@ export async function create({input}) {
             .input('dishDescription',mssql.VarChar,dishDescription)
             .input('dishPrice',mssql.Float,dishPrice)
             .input('dishPhoto',mssql.VarChar,dishPhoto)
+            .input('dishStatus', mssql.Bit,dishStatus)
             .input('dish_BusinessId',mssql.Int,dish_BusinessId)
             .input('dish_CategoriesId',mssql.Int,dish_CategoriesId)
             .query('Update Dishes set dishName=@dishName, '+
               'dishDescription=@dishDescription, dishPrice=@dishPrice, dishPhoto=@dishPhoto, ' +
-              'dish_BusinessId=@dish_BusinessId, dish_CategoriesId=@dish_CategoriesId '+
+              'dishStatus=@dishStatus, dish_BusinessId=@dish_BusinessId, dish_CategoriesId=@dish_CategoriesId '+
               'where dishId=@dishId;')
       pool.close()
       return {
@@ -118,6 +120,7 @@ export async function create({input}) {
         'dishDescription':dishDescription,
         'dishPrice':dishPrice,
         'dishPhoto':dishPhoto,
+        'dishStatus':dishStatus,
         'dish_BusinessId':dish_BusinessId,
         'dish_CategoriesId':dish_CategoriesId
       }        
@@ -131,7 +134,7 @@ export async function deleteById({ id }) {
       await pool.request()
         .input('dishId', mssql.Int, id)
         .query(
-          'delete from Dishes WHERE dishId=@dishId')
+          'UPDATE Dishes SET dishStatus=0 WHERE dishId=@dishId')
 
       pool.close()
       return true
