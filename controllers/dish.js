@@ -1,5 +1,6 @@
 import { create, deleteById, getDishByBusinessId, getDishCategory, getPopularDish, update } from "../models/dish.js"
 import { uploadSingleImageAsync } from "../middlewares/multer-config.js" 
+import { saveImageCloudinary } from '../models/image.js'
 import { httpError } from "../helpers/handleError.js"
 
 export const getListDishCategory = async(req, res)=>{
@@ -32,8 +33,17 @@ export const getListDishByBusiness = async(req, res) => {
 }
 export const createItem = async (req, res) => {
     try {
-        // await uploadSingleImageAsync(req,res)
-        // req.body.businessLogo = req.file.path
+        await uploadSingleImageAsync(req,res)
+        if(req.file)
+        {
+          const datos = {filePath:req.file.path,bodyName:req.body.dishName+req.body.dish_BusinessId}
+          const imgURLCloudinary = await saveImageCloudinary({  params: datos })
+          if(imgURLCloudinary === false) return res.status(404).json({message:'No se pudo guardar la imagen.'})
+          req.body.dishPhoto = imgURLCloudinary
+        } else {
+            req.body.dishPhoto = ''
+            console.log("Plato sin foto");
+        }
         const result = await create({ input: req.body })
         res.status(201).json(result)
         
@@ -45,10 +55,14 @@ export const updateItem = async(req, res) =>{
     try {
         // Verificar imagen
         await uploadSingleImageAsync(req,res)
+        if(req.file)
+        {
+          const datos = {filePath:req.file.path,bodyName:req.body.dishName+req.body.dish_BusinessId}
+          const imgURLCloudinary = await saveImageCloudinary({  params: datos })
+          if(imgURLCloudinary === false) return res.status(404).json({message:'No se pudo guardar la imagen.'})
+          req.body.dishPhoto = imgURLCloudinary
+        }
 
-        // const {id} = req.params
-        // req.body.businessId = id
-        // if(req.file) req.body.businessLogo = req.file.path
         console.log(req.body)
         const result = await update({input: req.body})
         res.status(200).json(result)

@@ -1004,7 +1004,7 @@
             "operationId": "createDish",
             "requestBody": {
                 "content": {
-                    "application/json": {
+                    "multipart/form-data": {
                         "schema": {
                             "$ref": "#/components/schemas/Dish"
                         }

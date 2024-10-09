@@ -67,7 +67,7 @@ export const createItem = async(req, res) =>{
         await uploadSingleImageAsync(req,res)
         if(req.file)
         {
-          const datos = {filePath:req.file.path,bodyBusinessName:req.body.businessName}
+          const datos = {filePath:req.file.path,bodyName:req.body.businessName}
           const imgURLCloudinary = await saveImageCloudinary({  params: datos })
           if(imgURLCloudinary === false) return res.status(404).json({message:'No se pudo guardar la imagen.'})
           req.body.businessLogo = imgURLCloudinary
