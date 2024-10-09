@@ -54,6 +54,20 @@ export async function getDishByBusinessId({dishBusinessId}) {
       console.error(error)
     }
 }
+export async function getById({id}) {
+  try {
+      const pool = await getConnection()
+      let result = await pool.request()
+                      .input('dishId', mssql.Int, id)
+                      .query('select * from dbo.Dishes'+
+                          ' where dishId=@dishId')
+      pool.close()
+      return result.recordset[0]
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 export async function create({input}) {
     try {
       const {

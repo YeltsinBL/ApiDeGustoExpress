@@ -1067,6 +1067,44 @@
         }
     },
     "/dish/{id}":{
+        "get":{
+            "tags": [
+                "Dish"
+            ],
+            "summary": "Obtener un plato",
+            "description": "Obtener los detalles del plato por su Id",
+            "operationId": "getDishById",
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID del plato a buscar",
+                    "required": true,
+                    "schema": {
+                      "type": "integer",
+                      "format": "int64"
+                    }
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "successful operation",
+                    "content": {
+                    "application/json": {
+                        "schema": {
+                        "$ref": "#/components/schemas/Dish"
+                        }
+                    }
+                    }
+                },
+                "400": {
+                    "description": "Invalid input"
+                },
+                "422": {
+                    "description": "Validation exception"
+                }
+            }
+        },
         "delete":{
             "tags": [
                 "Dish"

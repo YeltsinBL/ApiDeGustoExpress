@@ -1,4 +1,4 @@
-import { create, deleteById, getDishByBusinessId, getDishCategory, getPopularDish, update } from "../models/dish.js"
+import { create, deleteById, getById, getDishByBusinessId, getDishCategory, getPopularDish, update } from "../models/dish.js"
 import { uploadSingleImageAsync } from "../middlewares/multer-config.js" 
 import { saveImageCloudinary } from '../models/image.js'
 import { httpError } from "../helpers/handleError.js"
@@ -31,6 +31,18 @@ export const getListDishByBusiness = async(req, res) => {
         httpError(res, e)
     }
 }
+
+export const getItemById = async(req, res) =>{
+    try {
+        const {id} =req.params
+        const result = await getById({id})
+        if (result) return res.json(result)
+        res.status(404).json({ message: 'Plato no encontrada' })
+    } catch (e) {
+        
+    }
+}
+
 export const createItem = async (req, res) => {
     try {
         await uploadSingleImageAsync(req,res)
