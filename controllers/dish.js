@@ -1,5 +1,5 @@
 import { create, deleteById, getDishByBusinessId, getDishCategory, getPopularDish, update } from "../models/dish.js"
-import {uploadSingleImageAsync} from "./business.js"
+import { uploadSingleImageAsync } from "../middlewares/multer-config.js" 
 import { httpError } from "../helpers/handleError.js"
 
 export const getListDishCategory = async(req, res)=>{
