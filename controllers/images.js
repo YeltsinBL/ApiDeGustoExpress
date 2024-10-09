@@ -1,8 +1,7 @@
 import { directoryPath } from '../utils.js'
-import fs from 'fs'
 import path from "path";
 import { uploadSingleImageAsync } from '../middlewares/multer-config.js'; 
-import cloudinary from '../config/cloudinary.js'
+import { saveImageCloudinary } from '../models/image.js';
 
 export const saveImage = async (req, res) => {
     try {
@@ -69,25 +68,4 @@ export const viewImage = async (req, res) => {
             res.status(404).json({ message: 'Imagen no encontrada' });
         }
     });
-}
-
-async function saveImageCloudinary({params}) {
-    try {
-        const {filePath, bodyBusinessName} = params
-        const img = path.join(directoryPath, filePath)
-        // Upload image to Cloudinary
-        const result = await cloudinary.uploader
-            .upload(img , {
-                public_id: bodyBusinessName
-                ,folder:'test'
-            })
-            .catch((error) => {
-                console.log('cloudinaryUploader',error);
-                return false
-            })
-        fs.rmSync(path.join(directoryPath,'images',bodyBusinessName), { recursive: true })
-        return result.secure_url
-    } catch (error) {
-        console.log('saveImageCloudinary',error)
-    }
 }
