@@ -2,6 +2,15 @@ import { directoryPath } from '../utils.js'
 import multer from "multer";
 import fs from 'fs'
 import path from "path";
+import {uploadSingleImageAsync} from "./business.js"
+
+import { v2 as cloudinary } from 'cloudinary'
+// Cloudinary configuration
+cloudinary.config({ 
+    cloud_name: 'dkd0jybv9', 
+    api_key: '972378994624733', 
+    api_secret: 'YErSV_qvJ6KYlXD56h1tgyEm8fw' // Click 'View API Keys' above to copy your API secret
+});
 
 // Función para verificar si el archivo es una imagen
 const imageFilter = (req, file, cb) => {
@@ -57,35 +66,53 @@ const upload = multer({ storage: storage, fileFilter: imageFilter })
 const uploadSingleImage = upload.single('file')
 export const saveImage = async (req, res) => {
     try {
-        uploadSingleImage(req, res, function (err) {
-            console.log(err)
-            if(err) return res.status(400).json({message: err.message})
+    //     uploadSingleImage(req, res, function (err) {
+    //         console.log(err)
+    //         if(err) return res.status(400).json({message: err.message})
         
-        // // Paso 1: Guardar la data del body
-        const { businessName, businessAddress, businessPhoneNumber } = req.body;
+    //     // // Paso 1: Guardar la data del body
+    //     const { businessName, businessAddress, businessPhoneNumber } = req.body;
 
-        if (!businessName || !businessAddress || !businessPhoneNumber) {
-            return res.status(400).json({ message: 'Faltan datos en el cuerpo de la solicitud' });
-        }
+    //     if (!businessName || !businessAddress || !businessPhoneNumber) {
+    //         return res.status(400).json({ message: 'Faltan datos en el cuerpo de la solicitud' });
+    //     }
 
-        // Paso 2: Manejar los archivos después de los datos
+    //     // Paso 2: Manejar los archivos después de los datos
 
-        const files = req.file;
+    //     const files = req.file;
 
-        if (!files || files.length === 0) {
-            return res.status(400).json({ message: 'No se ha subido ningún archivo' });
-        }
+    //     if (!files || files.length === 0) {
+    //         return res.status(400).json({ message: 'No se ha subido ningún archivo' });
+    //     }
 
-        // Responder con los detalles de los archivos subidos y los datos guardados
-        res.status(201).json({
+    //     // Responder con los detalles de los archivos subidos y los datos guardados
+    //     res.status(201).json({
+    //         message: 'Data guardada e imágenes subidas exitosamente',
+    //         files: {
+    //             filename: files.filename,
+    //             path: files.path
+    //         },
+    //         body: req.body
+    //     });
+    // })
+
+        await uploadSingleImageAsync(req,res)
+        const secure_url = await saveImageCloudinary(
+            {params:
+                {filePath:req.file.path,bodyBusinessName:req.body.businessName}
+            }
+        )
+        
+        console.log('secure_url',secure_url)
+        
+        return res.status(201).json({
             message: 'Data guardada e imágenes subidas exitosamente',
             files: {
-                filename: files.filename,
-                path: files.path
+                filename: "files.filename",
+                path: secure_url
             },
             body: req.body
         });
-    })
     } catch (error) {
         
     }
@@ -103,3 +130,52 @@ export const viewImage = async (req, res) => {
         }
     });
 }
+
+async function saveImageCloudinary({params}) {
+    try {
+        const {filePath, bodyBusinessName} = params
+        const img = path.join(directoryPath, filePath)
+        // Upload image to Cloudinary
+        const result = await cloudinary.uploader
+            .upload(img , {
+                public_id: bodyBusinessName
+                ,folder:'test'
+            })
+            .catch((error) => {
+                console.log('cloudinaryUploader',error);
+                return false
+            })
+        fs.rmSync(path.join(directoryPath,'images',bodyBusinessName), { recursive: true })
+        return result.secure_url
+    } catch (error) {
+        console.log('saveImageCloudinary',error)
+    }
+}
+
+/**
+ * 
+{
+  asset_id: 'bbea272d9844b1420b0baca4a4f2d13f',
+  public_id: 'test/logoDeGusto',
+  version: 1728436154,
+  version_id: '79c39159c5447fa98b739b57be049b1b',
+  signature: '53d05b165260875fe6ac7c311d9a08d48057badd',
+  width: 1120,
+  height: 1120,
+  format: 'jpg',
+  resource_type: 'image',
+  created_at: '2024-10-09T01:09:14Z',
+  tags: [],
+  bytes: 218452,
+  type: 'upload',
+  etag: '60c0a6f77d14ad173a113d16211e0e48',
+  placeholder: false,
+  url: 'http://res.cloudinary.com/dkd0jybv9/image/upload/v1728436154/test/logoDeGusto.jpg',
+  secure_url: 'https://res.cloudinary.com/dkd0jybv9/image/upload/v1728436154/test/logoDeGusto.jpg',
+  asset_folder: 'test',
+  display_name: 'logoDeGusto',
+  original_filename: '1728436152746',
+  original_extension: 'jpeg',
+  api_key: '972378994624733'
+}
+ */
