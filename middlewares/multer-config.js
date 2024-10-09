@@ -18,7 +18,7 @@ const imageFilter = (req, file, cb) => {
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         if(!file) return
-        const dir = './images'.concat(`/${req.body.businessName.replace(/\s/g,'')}`, '/logo');
+        const dir = './images'.concat(`/${req.body.businessName}`, '/logo');
         const storeFolder = directoryPath.concat(dir.substring(2))
         if (!fs.existsSync(storeFolder)) {
             fs.mkdirSync(storeFolder, { recursive: true });
@@ -27,7 +27,7 @@ const storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
         if(!file) return
-        const dir = './images'.concat(`/${req.body.businessName.replace(/\s/g,'')}`, '/logo');
+        const dir = './images'.concat(`/${req.body.businessName}`, '/logo');
         // Verificar si ya existe algún archivo en la carpeta
         fs.readdir(dir, (err, files) => {
           if (err)return cb(err)
