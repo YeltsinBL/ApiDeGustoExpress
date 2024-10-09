@@ -1,4 +1,4 @@
-import {getConnection, mssql} from './sql/connection_sql.js'
+import {getConnection} from '../config/connection_sql.js'
 export async function getAll() {
     try {
         // return [{'businessAreaId':1,'businessAreaName':'Restaurante'},

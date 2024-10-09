@@ -1,4 +1,4 @@
-import {getConnection, mssql} from './sql/connection_sql.js'
+import { getConnection, mssql } from '../config/connection_sql.js' 
 export async function getAll({input}) {
     try {
 

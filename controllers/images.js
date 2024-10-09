@@ -3,14 +3,7 @@ import multer from "multer";
 import fs from 'fs'
 import path from "path";
 import {uploadSingleImageAsync} from "./business.js"
-
-import { v2 as cloudinary } from 'cloudinary'
-// Cloudinary configuration
-cloudinary.config({ 
-    cloud_name: 'dkd0jybv9', 
-    api_key: '972378994624733', 
-    api_secret: 'YErSV_qvJ6KYlXD56h1tgyEm8fw' // Click 'View API Keys' above to copy your API secret
-});
+import cloudinary from '../config/cloudinary.js'
 
 // Función para verificar si el archivo es una imagen
 const imageFilter = (req, file, cb) => {
@@ -151,31 +144,3 @@ async function saveImageCloudinary({params}) {
         console.log('saveImageCloudinary',error)
     }
 }
-
-/**
- * 
-{
-  asset_id: 'bbea272d9844b1420b0baca4a4f2d13f',
-  public_id: 'test/logoDeGusto',
-  version: 1728436154,
-  version_id: '79c39159c5447fa98b739b57be049b1b',
-  signature: '53d05b165260875fe6ac7c311d9a08d48057badd',
-  width: 1120,
-  height: 1120,
-  format: 'jpg',
-  resource_type: 'image',
-  created_at: '2024-10-09T01:09:14Z',
-  tags: [],
-  bytes: 218452,
-  type: 'upload',
-  etag: '60c0a6f77d14ad173a113d16211e0e48',
-  placeholder: false,
-  url: 'http://res.cloudinary.com/dkd0jybv9/image/upload/v1728436154/test/logoDeGusto.jpg',
-  secure_url: 'https://res.cloudinary.com/dkd0jybv9/image/upload/v1728436154/test/logoDeGusto.jpg',
-  asset_folder: 'test',
-  display_name: 'logoDeGusto',
-  original_filename: '1728436152746',
-  original_extension: 'jpeg',
-  api_key: '972378994624733'
-}
- */

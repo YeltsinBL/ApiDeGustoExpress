@@ -1,5 +1,5 @@
-import { SALT_ROUNDS } from '../config.js'
-import {getConnection, mssql} from './sql/connection_sql.js'
+import { SALT_ROUNDS } from '../config/config.js' 
+import {getConnection, mssql} from '../config/connection_sql.js'
 import bcrypt from 'bcrypt'
 export async function getAccount ({ input }) {
     try {
