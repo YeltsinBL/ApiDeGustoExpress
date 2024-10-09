@@ -20,12 +20,19 @@ Apis para el sistema DeGusto, referente a buscar restaurantes cercas de la ubica
   - Esto ejecutará el proyecto, luego de haber instalado todas las dependencias
 - El proyecto correrá en el puerto que le indicaste o en el `http://localhost:3000`
 
+## Almacenamiento de imágenes
+
+- Se esta utilizando [Cloudinary][cloudinary].
+- Crea tu cuenta y ahí te dan las credencias que necesitarás.
+
 ```sh
 > Nota:
-# comando para generar una SECRET KEY
+# comando para generar una SECRET JWT KEY
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+
 ```
 
 [//]: # (Enlaces a la documentación)
 
 [node]: <https://nodejs.org/en/download/package-manager>
+[cloudinary]: <https://cloudinary.com/>
