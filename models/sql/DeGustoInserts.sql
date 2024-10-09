@@ -35,13 +35,13 @@ VALUES
 ('Cines'),
 ('Tecnología'),
 ('Salud');
-INSERT INTO Business (businessName, businessAddress, businessPhoneNumber, businessStatus, businessLogo, businessLatitude, businessLongitude, business_AreaId, business_UserId)
+INSERT INTO Business (businessName, businessAddress, businessPhoneNumber, businessStatus, businessLogo, businessLatitude, businessLongitude, businessCategorization, business_AreaId, business_UserId)
 VALUES
-('La Buena Mesa', '123 Gourmet Street', '123456789', 1, 'restaurant_logo.png', 40.712776, -74.005974, 1, 1),
-('Hotel Paraíso', '456 Luxury Avenue', '234567890', 1, 'hotel_logo.png', 34.052235, -118.243683, 2, 2),
-('Cinepolis', '789 Movie Blvd', '345678901', 1, 'cine_logo.png', 51.507351, -0.127758, 3, 3),
-('Tech Solutions', '123 Tech Street', '123456789', 1, 'tech_logo.png', 40.712776, -74.005974, 4, 4),
-('HealthPlus Clinic', '101 Health Street', '456789012', 1, 'health_logo.png', 41.878113, -87.629799, 5, 5);
+('La Buena Mesa', '123 Gourmet Street', '123456789', 1, 'restaurant_logo.png', 40.712776, -74.005974, 4, 1, 1),
+('Hotel Paraíso', '456 Luxury Avenue', '234567890', 1, 'hotel_logo.png', 34.052235, -118.243683, 3, 2, 2),
+('Cinepolis', '789 Movie Blvd', '345678901', 1, 'cine_logo.png', 51.507351, -0.127758, 2, 3, 3),
+('Tech Solutions', '123 Tech Street', '123456789', 1, 'tech_logo.png', 40.712776, -74.005974, 1, 4, 4),
+('HealthPlus Clinic', '101 Health Street', '456789012', 1, 'health_logo.png', 41.878113, -87.629799, 5, 5, 5);
 
 INSERT INTO DishCategories (dishCategoryName, dishCategoryCreatedAt, dishCategoryModifiedAt, dishCategoryModifyByUser, dishCategory_BusinessId)
 VALUES

@@ -59,7 +59,7 @@ export async function getPopularBusiness({ input }) {
             ' [b].[businessName], [b].[businessAddress], ' +
             ' [b].[businessPhoneNumber], [b].[businessStatus], ' +
             ' [b].[businessLogo], [b].[businessLatitude], ' +
-            ' [b].[businessLongitude], AVG(rw.reviewRating) AS businessAverageRating, ' +
+            ' [b].[businessLongitude], [b].[businessCategorization], AVG(rw.reviewRating) AS businessAverageRating, ' +
             ' COUNT(rw.reviewsId) AS businessTotalReviews, ' +
             ' CASE WHEN (6371 * ACOS(COS(RADIANS(@LATITUDE)) * COS(RADIANS(b.businessLatitude)) * COS(RADIANS(b.businessLongitude) - RADIANS(@LONGITUDE)) + SIN(RADIANS(@LATITUDE)) * SIN(RADIANS(b.businessLatitude)))) < 1 ' +
             '   THEN CONCAT(ROUND((6371 * ACOS(COS(RADIANS(@LATITUDE)) * COS(RADIANS(b.businessLatitude)) * COS(RADIANS(b.businessLongitude) - RADIANS(@LONGITUDE)) + SIN(RADIANS(@LATITUDE)) * SIN(RADIANS(b.businessLatitude)))) * 1000, 2), \' m \') ' +
@@ -70,7 +70,7 @@ export async function getPopularBusiness({ input }) {
             ' GROUP BY [b].[businessId], [b].[businessName], ' +
             ' [b].[businessAddress], [b].[businessPhoneNumber], ' +
             ' [b].[businessStatus], [b].[businessLogo], ' +
-            ' [b].[businessLatitude], [b].[businessLongitude] ' +
+            ' [b].[businessLatitude], [b].[businessLongitude] , [b].[businessCategorization] ' +
             ' HAVING COUNT(rw.reviewsId) > 0 ' +
             ' ORDER BY businessAverageRating DESC;')
     pool.close()
@@ -113,7 +113,7 @@ export async function create({input}) {
     const {
       businessName, businessAddress,  businessPhoneNumber,
       businessStatus, businessLogo, businessLatitude,
-      businessLongitude, business_AreaId, business_UserId
+      businessLongitude, businessCategorization, business_AreaId, business_UserId
     } = input
 
     const pool = await getConnection()
@@ -125,13 +125,14 @@ export async function create({input}) {
           .input('businessLogo',mssql.VarChar,businessLogo)
           .input('businessLatitude',mssql.Float,businessLatitude)
           .input('businessLongitude',mssql.Float,businessLongitude)
+          .input('businessCategorization',mssql.Int,businessCategorization)
           .input('business_AreaId',mssql.Int,business_AreaId)
           .input('business_UserId',mssql.Int,business_UserId)
           .query('Insert into Business (businessName,businessAddress,businessPhoneNumber, '+
-            'businessStatus, businessLogo, businessLatitude, businessLongitude, '+
+            'businessStatus, businessLogo, businessLatitude, businessLongitude, businessCategorization, '+
             'business_AreaId, business_UserId)' +
             'values(@businessName, @businessAddress, @businessPhoneNumber, @businessStatus, '+
-            '@businessLogo, @businessLatitude, @businessLongitude, @business_AreaId, @business_UserId); '+
+            '@businessLogo, @businessLatitude, @businessLongitude, @businessCategorization, @business_AreaId, @business_UserId); '+
             'Select SCOPE_IDENTITY() as businessId;')
     pool.close()
     const [{businessId}] = result.recordset
@@ -144,6 +145,7 @@ export async function create({input}) {
       'businessLogo':businessLogo,
       'businessLatitude':businessLatitude,
       'businessLongitude':businessLongitude,
+      'businessCategorization':businessCategorization,
       'business_AreaId':business_AreaId,
       'business_UserId':business_UserId
     }        
@@ -158,7 +160,7 @@ export async function upload({input}) {
     const {
       businessId, businessName, businessAddress,
       businessPhoneNumber, businessStatus, businessLogo,
-      businessLatitude, businessLongitude, business_AreaId,
+      businessLatitude, businessLongitude, businessCategorization, business_AreaId,
       business_UserId
     } = input
 
@@ -172,11 +174,12 @@ export async function upload({input}) {
           .input('businessLogo',mssql.VarChar,businessLogo)
           .input('businessLatitude',mssql.Float,businessLatitude)
           .input('businessLongitude',mssql.Float,businessLongitude)
+          .input('businessCategorization',mssql.Int,businessCategorization)
           .query('update Business '+
             'set businessName= @businessName, businessAddress= @businessAddress, '+
             ' businessPhoneNumber= @businessPhoneNumber, businessStatus= @businessStatus, '+
             ' businessLogo= @businessLogo, businessLatitude= @businessLatitude, '+
-            ' businessLongitude= @businessLongitude ' +
+            ' businessLongitude= @businessLongitude, businessCategorization= @businessCategorization ' +
             'where businessId= @businessId;'
           )
     //console.log(result)
@@ -189,6 +192,7 @@ export async function upload({input}) {
       'businessLogo':businessLogo,
       'businessLatitude':businessLatitude,
       'businessLongitude':businessLongitude,
+      'businessCategorization':businessCategorization,
       'business_AreaId':business_AreaId,
       'business_UserId':business_UserId
     }   

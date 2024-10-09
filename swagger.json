@@ -1219,6 +1219,11 @@
                     "format": "int64",
                     "example": -74.005974
                 },
+                "businessCategorization":{
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 3
+                },
                 "business_AreaId": {
                     "type": "integer",
                     "format": "int64",
@@ -1393,6 +1398,11 @@
                     "format": "int64",
                     "example": -74.005974
                 },
+                "businessCategorization":{
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 3
+                },
                 "business_AreaId": {
                     "type": "integer",
                     "format": "int64",
@@ -1410,7 +1420,8 @@
                 }
             },
             "required": ["businessName", "businessAddress","businessPhoneNumber",
-        "businessStatus","businessLatitude","businessLongitude","business_AreaId","business_UserId"]
+                        "businessStatus","businessLatitude","businessLongitude",
+                        "businessCategorization","business_AreaId","business_UserId"]
         },
         "CategoryDish":{
             "type": "object",

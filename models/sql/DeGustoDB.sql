@@ -48,6 +48,7 @@ CREATE TABLE Business (
   businessLogo VARCHAR(MAX),
   businessLatitude FLOAT,
   businessLongitude FLOAT,
+  businessCategorization INT NOT NULL CHECK (businessCategorization >= 1 AND businessCategorization <= 5),
   business_AreaId INT NOT NULL REFERENCES BusinessArea(businessAreaId),
   business_UserId INT NULL REFERENCES Users(userId)
 );
