@@ -335,6 +335,82 @@
                     "description": "Negocio no encontrado"
                 }
             }
+        },
+        "put":{
+            "tags": [ "User" ],
+            "summary": "Actualizar la cuenta del usuario",
+            "description": "Actualizar el tipo y estado de la cuenta",
+            "operationId": "updateUser",
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID del usuario",
+                    "required": true,
+                    "schema": {
+                      "type": "integer",
+                      "format": "int64"
+                    }
+                }
+            ],
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "personTypeId":{
+                                    "type": "integer",
+                                    "format": "int64",
+                                    "description": "1: Owner, 2: Customer, 3 Admin",
+                                    "example":1
+                                },
+                                "userStatus":{
+                                    "type": "integer",
+                                    "format": "int64",
+                                    "description": "0: pendiente/Solicitud, 1:Activo, 2:eliminado",
+                                    "example":1
+                                }
+                            }
+                        }
+                    }
+                },
+                "required": true
+            },
+            "responses": {
+                "200":{
+                    "description": "successful operation",
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "type": "object",
+                                "properties": {
+                                    "userId":{
+                                        "type": "integer",
+                                        "format": "int64",
+                                        "example":1
+                                    },
+                                    "personTypeId":{
+                                        "type": "integer",
+                                        "format": "int64",
+                                        "description": "1: Owner, 2: Customer, 3 Admin",
+                                        "example":1
+                                    },
+                                    "userStatus":{
+                                        "type": "integer",
+                                        "format": "int64",
+                                        "description": "0: pendiente/Solicitud, 1:Activo, 2:eliminado",
+                                        "example":1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "Negocio no encontrado"
+                }
+            }
         }
     },
     "/businessareas": {

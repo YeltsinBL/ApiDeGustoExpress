@@ -1,4 +1,4 @@
-import { getAccount, getAll, getById, deleteById, create } from "../models/user.js"
+import { getAccount, getAll, getById, deleteById, create, upload } from "../models/user.js"
 import { httpError } from "../helpers/handleError.js"
 import jwt from 'jsonwebtoken'
 export const login = async(req, res)=>{
@@ -82,4 +82,16 @@ export const createItem = async (req, res) => {
 export const logout = async (req, res) => {
     res.clearCookie('access_token')
     .json({ message: 'Sesión Cerrada' })
+}
+
+export const updateItem = async(req, res) =>{
+    try {
+        const {id} = req.params
+        req.body.userId = id
+        const result = await upload({input: req.body})
+        res.status(200).json(result)
+    } catch (error) {
+        return res.status(400).json({message: error.message})
+        // httpError(res,e)
+    }
 }

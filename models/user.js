@@ -131,3 +131,44 @@ export async function deleteById({ id }) {
       console.log(error)
     }
 }
+export async function upload({input}) {
+  try {
+    //console.log(input)
+    const {
+      userId, personTypeId, userStatus
+    } = input
+
+    const pool = await getConnection()
+    let verifyTypePerson = await pool.request()
+        .input('userId', mssql.Int, userId)
+        .query('SELECT p.person_Type FROM Persons p '+
+                'JOIN Users u ON p.personId = u.user_personId '+
+                'WHERE u.userId=userId')
+      const [{ person_Type }] = verifyTypePerson.recordset
+      if (person_Type != personTypeId) {
+        await pool.request()
+          .input('userId',mssql.Int,userId)
+          .input('personTypeId',mssql.Int,personTypeId)
+          .query('update Persons '+
+            ' set person_Type=@personTypeId '+
+            'where personId = (select user_personId FROM Users WHERE userId = @userId);'
+          )
+      }
+      await pool.request()
+          .input('userId',mssql.Int,userId)
+          .input('userStatus',mssql.Int,userStatus)
+          .query('update Users '+
+            ' set userStatus=@userStatus '+
+            'where userId = @userId;'
+          )
+    
+    //console.log(result)
+    return {
+      'userId':userId,
+      'personTypeId':personTypeId,
+      'userStatus':userStatus
+    }   
+  } catch (error) {
+    
+  }
+}

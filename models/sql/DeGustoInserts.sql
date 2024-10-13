@@ -5,6 +5,7 @@ INSERT INTO PersonTypes (personTypeName, personTypeStatus)
 VALUES
 ('Owner',1),
 ('Customer',1)
+('Admin',1)
 
 
 INSERT INTO Persons (personName, personEmail, personPhoneNumber, person_Type)
