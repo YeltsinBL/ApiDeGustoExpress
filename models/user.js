@@ -107,8 +107,8 @@ export async function create ({ input }) {
 
       pool.close()
       return {'userId':userId,
-            'userName':name,
-            'personName':userName,
+            'userName':userName,
+            'personName':name,
             'personEmail':email,
             'personPhoneNumber':phoneNumber,
             'personTypeName':personTypeName,
