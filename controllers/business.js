@@ -15,7 +15,7 @@ export const getItems = async(req, res)=>{
 }
 export const getItemsMobile = async(req, res)=>{
     try {
-        const listAll = await getAllMobile()
+        const listAll = await getAllMobile({input: req.query})
         res.send(listAll)
 
     } catch (e) {

@@ -553,9 +553,40 @@
             "tags": [
                 "Business"
             ],
-            "summary": "Lista de todos los negocios activos en la aplicación móvil",
-            "description": "Lista de todos los negocios activos",
+            "summary": "Lista de todos los negocios activos a menos de 5 kilómetros",
+            "description": "Lista de todos los negocios activos en la aplicación móvil",
             "operationId": "getBusinessMobile",
+            "parameters": [
+                {
+                    "name": "latitude",
+                    "in": "query",
+                    "description": "Longitud de la ubicación del usuario",
+                    "required": true,
+                    "schema": {
+                        "type": "number",
+                        "example": -8.074157889449705
+                    }
+                },
+                {
+                    "name": "longitude",
+                    "in": "query",
+                    "description": "Latitud de la ubicación del usuario",
+                    "required": true,
+                    "schema": {
+                        "type": "number",
+                        "example": -79.05579181295246
+                    }
+                }, 
+                {
+                    "name": "businessName",
+                    "in": "query",
+                    "description": "Nombre del negocio a buscar",
+                    "schema":{
+                        "type": "string",
+                        "example":"La Buena Mesa"
+                    }
+                }
+            ],
             "responses": {
                 "200":{
                     "description": "successful operation",
@@ -564,7 +595,7 @@
                             "schema":{
                                 "type": "array",
                                 "items":{
-                                    "$ref": "#/components/schemas/Business"
+                                    "$ref": "#/components/schemas/BusinessMovil"
                                 }
                             }
                         }
@@ -594,8 +625,8 @@
             "tags": [
                 "Business"
             ],
-            "summary": "Lista de los negocios más populares",
-            "description": "Lista de los 5 negocios más populares",
+            "summary": "Lista de los negocios más populares cerca de la ubicación",
+            "description": "Lista de los 5 negocios más populares cercanos",
             "operationId": "getBusinessPopular",
             "parameters": [
                 {
@@ -1375,6 +1406,11 @@
                     "type": "integer",
                     "format": "int64",
                     "example": -74.005974
+                },
+                "businessCategorization":{
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 3
                 },
                 "businessAverageRating": {
                     "type": "integer",

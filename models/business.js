@@ -42,10 +42,37 @@ export async function getAllStates() {
     console.error(error)
   }
 }
-export async function getAllMobile() {
+export async function getAllMobile({input}) {
   try {
+      const { latitude, longitude, businessName } = input
       const pool = await getConnection()
-      let result = await pool.request().query('select * from dbo.Business where businessStatus=2')
+      let menorQue=0.6
+      if (typeof businessName == 'string' ) menorQue = 9999
+      
+      let result = await pool.request()
+            .input('LATITUDE', mssql.Float, latitude)
+            .input('LONGITUDE', mssql.Float, longitude)
+            .input('businessName', mssql.VarChar, (typeof businessName == 'string' ? businessName : ''))
+            .input('menorQue', mssql.Float, menorQue)
+            .query('SELECT [b].[businessId], ' +
+              ' [b].[businessName], [b].[businessAddress], ' +
+              ' [b].[businessPhoneNumber], [b].[businessStatus], ' +
+              ' [b].[businessLogo], [b].[businessLatitude], ' +
+              ' [b].[businessLongitude], [b].[businessCategorization], AVG(rw.reviewRating) AS businessAverageRating, ' +
+              ' COUNT(rw.reviewsId) AS businessTotalReviews, ' +
+              ' CASE WHEN (6371 * ACOS(COS(RADIANS(@LATITUDE)) * COS(RADIANS(b.businessLatitude)) * COS(RADIANS(b.businessLongitude) - RADIANS(@LONGITUDE)) + SIN(RADIANS(@LATITUDE)) * SIN(RADIANS(b.businessLatitude)))) < 1 ' +
+              '   THEN CONCAT(ROUND((6371 * ACOS(COS(RADIANS(@LATITUDE)) * COS(RADIANS(b.businessLatitude)) * COS(RADIANS(b.businessLongitude) - RADIANS(@LONGITUDE)) + SIN(RADIANS(@LATITUDE)) * SIN(RADIANS(b.businessLatitude)))) * 1000, 2), \' m \') ' +
+              '   ELSE CONCAT(ROUND(6371 * ACOS(COS(RADIANS(@LATITUDE)) * COS(RADIANS(b.businessLatitude)) * COS(RADIANS(b.businessLongitude) - RADIANS(@LONGITUDE)) + SIN(RADIANS(@LATITUDE)) * SIN(RADIANS(b.businessLatitude))), 2), \' km \') ' +
+              ' END AS businessDistance ' +
+              ' FROM Business b ' +
+              ' LEFT JOIN Reviews rw ON b.businessId = rw.review_BusinessId ' +
+              ' WHERE [b].businessStatus = 2 AND  b.businessName LIKE \'%\'+@businessName+\'%\' ' +
+              ' GROUP BY [b].[businessId], [b].[businessName], ' +
+              ' [b].[businessAddress], [b].[businessPhoneNumber], ' +
+              ' [b].[businessStatus], [b].[businessLogo], ' +
+              ' [b].[businessLatitude], [b].[businessLongitude] , [b].[businessCategorization] ' +
+              ' HAVING (6371 * ACOS(COS(RADIANS(@LATITUDE)) * COS(RADIANS(b.businessLatitude)) * COS(RADIANS(b.businessLongitude) - RADIANS(@LONGITUDE)) + SIN(RADIANS(@LATITUDE)) * SIN(RADIANS(b.businessLatitude)))) < @menorQue ' + // >5km
+              ' ORDER BY businessAverageRating DESC;')
       pool.close()
       return result.recordset
   } catch (error) {
@@ -70,12 +97,12 @@ export async function getPopularBusiness({ input }) {
             '   ELSE CONCAT(ROUND(6371 * ACOS(COS(RADIANS(@LATITUDE)) * COS(RADIANS(b.businessLatitude)) * COS(RADIANS(b.businessLongitude) - RADIANS(@LONGITUDE)) + SIN(RADIANS(@LATITUDE)) * SIN(RADIANS(b.businessLatitude))), 2), \' km \') ' +
             ' END AS businessDistance ' +
             ' FROM Business b ' +
-            ' JOIN Reviews rw ON b.businessId = rw.review_BusinessId ' +
+            ' LEFT JOIN Reviews rw ON b.businessId = rw.review_BusinessId ' +
+            ' WHERE [b].businessStatus = 2 ' +
             ' GROUP BY [b].[businessId], [b].[businessName], ' +
             ' [b].[businessAddress], [b].[businessPhoneNumber], ' +
             ' [b].[businessStatus], [b].[businessLogo], ' +
             ' [b].[businessLatitude], [b].[businessLongitude] , [b].[businessCategorization] ' +
-            ' HAVING COUNT(rw.reviewsId) > 0 ' +
             ' ORDER BY businessAverageRating DESC;')
     pool.close()
     return result.recordset
