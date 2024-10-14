@@ -2,7 +2,7 @@ import { getConnection, mssql } from '../config/connection_sql.js'
 export async function getAll({input}) {
     try {
 
-      const { userId } = input
+      const { userId, businessName, businessStatus } = input
       const pool = await getConnection()
 
       let valid = await pool.request()
@@ -17,12 +17,16 @@ export async function getAll({input}) {
       if(parseInt(person_Type)==2) return {"codeStatus":400, "message":"No tienes acceso"}
       // console.log(parseInt(person_Type),parseInt(userId))
 
-        let addWhere = ''
-        if(parseInt(person_Type)==1) {
-          addWhere='where business_UserId='+parseInt(userId)}
-        let result = await pool.request().query('select * from dbo.Business '+addWhere)
-        pool.close()
-        return result.recordset
+      let addWhere = 'WHERE 1=1 '
+      if(parseInt(person_Type)==1) addWhere +=' AND business_UserId='+parseInt(userId)
+      if (businessName) addWhere += ` AND businessName LIKE '%${businessName}%'`
+        
+      if (typeof parseInt(businessStatus) === 'number' && !isNaN(parseInt(businessStatus))) {
+        addWhere += ` AND businessStatus = ${parseInt(businessStatus)}`
+      }
+      let result = await pool.request().query('select * from dbo.Business '+addWhere)
+      pool.close()
+      return result.recordset
     } catch (error) {
       console.error(error)
     }

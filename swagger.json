@@ -460,6 +460,25 @@
                         "type": "integer",
                         "example":0
                     }
+                },
+                {
+                    "name": "businessName",
+                    "in": "query",
+                    "description": "Nombre del negocio",
+                    "schema": {
+                        "type": "string",
+                        "example": "La Buena Mesa"
+                    }
+                },
+                {
+                    "name": "businessStatus",
+                    "in": "query",
+                    "description": "Estados de los negocios: 0: pendiente/Solicitud, 1:Activo, 2:eliminado, NO ENVIAR SI QUIERE QUE SE MUESTRE TODOS",
+                    "schema": {
+                        "type": "integer",
+                        "nullable": true,
+                        "example":0
+                    }
                 }
         ],
             "responses": {
