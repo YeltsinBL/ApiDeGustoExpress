@@ -65,8 +65,9 @@ export async function getAllMobile({input}) {
               '   ELSE CONCAT(ROUND(6371 * ACOS(COS(RADIANS(@LATITUDE)) * COS(RADIANS(b.businessLatitude)) * COS(RADIANS(b.businessLongitude) - RADIANS(@LONGITUDE)) + SIN(RADIANS(@LATITUDE)) * SIN(RADIANS(b.businessLatitude))), 2), \' km \') ' +
               ' END AS businessDistance ' +
               ' FROM Business b ' +
+              ' LEFT join Dishes ds on b.businessId=ds.dish_BusinessId ' +
               ' LEFT JOIN Reviews rw ON b.businessId = rw.review_BusinessId ' +
-              ' WHERE [b].businessStatus = 2 AND  b.businessName LIKE \'%\'+@businessName+\'%\' ' +
+              ' WHERE [b].businessStatus = 2 AND  CONCAT(b.businessName,\' \',ds.dishName,\' \',ds.dishDescription ) LIKE \'%\'+@businessName+\'%\' ' +
               ' GROUP BY [b].[businessId], [b].[businessName], ' +
               ' [b].[businessAddress], [b].[businessPhoneNumber], ' +
               ' [b].[businessStatus], [b].[businessLogo], ' +
