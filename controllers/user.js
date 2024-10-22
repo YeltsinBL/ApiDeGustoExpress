@@ -12,7 +12,7 @@ export const login = async(req, res)=>{
 
         // Creación de un token
         const token = jwt.sign(
-            {id:user.userId, username:user.userName, userStatus:user.userStatus}, // Datos del usuario
+            {id:user.userId, username:user.userName, userStatus:user.userStatus, personEmail:user.personEmail}, // Datos del usuario
             process.env.SECRET_JWT_KEY, // Clave secreta
             { expiresIn:'1h' } // tiempo de expiración
         )

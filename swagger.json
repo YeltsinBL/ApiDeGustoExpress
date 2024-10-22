@@ -27,14 +27,6 @@
       "description": "Modulo de Negocio"
     },
     {
-      "name": "Owner",
-      "description": "Modulo de Propietarios"
-    },
-    {
-      "name": "Customer",
-      "description": "Modulo de Clientes"
-    },
-    {
       "name": "Image",
       "description": "Modulo de Imágenes"
     },
@@ -232,6 +224,10 @@
                                         "userStatus":{
                                             "type": "integer",
                                             "example":0
+                                        },
+                                        "personEmail":{
+                                            "type": "string",
+                                            "example":"prueba@gmail.com"
                                         },
                                         "iat":{
                                             "type": "integer",
@@ -1290,6 +1286,10 @@
                     "type": "integer",
                     "description": "0: pendiente/Solicitud, 1:Activo, 2:eliminado",
                     "example":0
+                },
+                "personEmail":{
+                    "type": "string",
+                    "example":"prueba@gmail.com"
                 },
                 "person_TypeId":{
                     "type": "integer",

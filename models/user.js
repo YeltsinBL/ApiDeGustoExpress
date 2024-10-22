@@ -7,13 +7,13 @@ export async function getAccount ({ input }) {
         const pool = await getConnection()
         let result = await pool.request()
                 .input('userName', mssql.VarChar, userName)
-                .query('SELECT uId=u.userId, uName=u.userName, uStatus=u.userStatus, userPasswordHash=u.userPassword, person_TypeId=p.person_Type '+
+                .query('SELECT uId=u.userId, uName=u.userName, uStatus=u.userStatus, userPasswordHash=u.userPassword, pEmail=p.personEmail, person_TypeId=p.person_Type '+
                     'FROM Users u '+
                     'JOIN Persons p ON u.user_personId = p.personId ' +
                     'WHERE u.userName=@userName;'
                 )
         if(result.recordset.length==0) return {"codeStatus":400, "message":"Usuario incorrecto"}
-        const [{uId, uName, uStatus,userPasswordHash, person_TypeId}] = result.recordset
+        const [{uId, uName, uStatus,userPasswordHash, pEmail, person_TypeId}] = result.recordset
         const isValid = await bcrypt.compare(userPassword, userPasswordHash)
         if(!isValid) return {"codeStatus":400, "message":"Contraseña incorrecta"};
         if(uStatus == 2) return {"codeStatus":403, "message":"Cuenta suspendida."};
@@ -31,6 +31,7 @@ export async function getAccount ({ input }) {
             userId: uId,
             userName: uName,
             userStatus:uStatus,
+            personEmail: pEmail,
             person_TypeId:person_TypeId
         }
     } catch (error) {
