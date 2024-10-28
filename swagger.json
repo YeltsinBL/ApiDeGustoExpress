@@ -1042,6 +1042,42 @@
             }
         }
     },
+    "/dish/dishCategory/{businessId}":{
+        "get":{
+            "tags": [ "Dish" ],
+            "summary": "Lista de todas las categorías de los platos por Negocio",
+            "description": "Lista de las categorías de los platos por el ID del negocio",
+            "operationId": "getDishCategoryByBusinessId",
+            "parameters": [{
+                "name": "businessId",
+                "in": "path",
+                "description": "ID del negocio del plato",
+                "required": true,
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+            }],
+            "responses": {
+                "200": {
+                    "description": "successful operation",
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "type": "array",
+                                "items":{
+                                    "$ref": "#/components/schemas/CategoryDish"
+                                }
+                            }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "No implementado"
+                }
+            }
+        }
+    },
     "/dish/popular/{dishCategoryId}":{
         "get":{
             "tags": [ "Dish" ],

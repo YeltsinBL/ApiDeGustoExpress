@@ -1,4 +1,4 @@
-import { create, deleteById, getById, getDishByBusinessId, getDishCategory, getPopularDish, update } from "../models/dish.js"
+import { create, deleteById, getById, getDishByBusinessId, getDishCategory, getDishCategoryByBusiness, getPopularDish, update } from "../models/dish.js"
 import { uploadSingleImageAsync } from "../middlewares/multer-config.js" 
 import { saveImageCloudinary } from '../models/image.js'
 import { httpError } from "../helpers/handleError.js"
@@ -11,7 +11,16 @@ export const getListDishCategory = async(req, res)=>{
         httpError(res,e)
     }
 }
-
+export const getListDishCategoryByBusinessId = async(req, res) =>{
+    try {
+        const {businessId} =req.params
+        const result = await getDishCategoryByBusiness({businessId})
+        if (result) return res.json(result)
+        res.status(404).json({ message: 'Categorías de Platos no encontradas' })
+    } catch (e) {
+        httpError(res, e)
+    }
+}
 export const getListPopularDish = async(req, res) => {
     try {
         const {dishCategoryId} = req.params

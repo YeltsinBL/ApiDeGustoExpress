@@ -20,6 +20,26 @@ export async function getDishCategory() {
     }
 }
 
+export async function getDishCategoryByBusiness({businessId}) {
+  try {
+      const pool = await getConnection()
+      let result = await pool.request()
+                      .input('dishBusinessId',mssql.Int,businessId)
+                      .query('SELECT ' +
+                          '     0 AS dishCategoryID, ' +
+                          '    \'Todos\' AS dishCategoryName ' +
+                          ' UNION ' +
+                          ' SELECT distinct [dc].[dishCategoryID], ' +
+                          ' [dc].[dishCategoryName] FROM DishCategories dc ' +
+                          ' INNER JOIN Dishes d on d.dish_CategoriesId = dc.dishCategoryID ' +
+                          ' WHERE d.dish_BusinessId = @dishBusinessId')
+      pool.close()
+      return result.recordset
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 export async function getPopularDish({dishCategoryId}) {
     try {
         const pool = await getConnection()
