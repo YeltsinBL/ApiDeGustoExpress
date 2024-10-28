@@ -90,8 +90,9 @@ CREATE TABLE ReservationDetails (
 CREATE TABLE reviews (
   reviewsId INT PRIMARY KEY IDENTITY,
   reviewRating INT CHECK (reviewRating >= 1 AND reviewRating <= 5),
-  reviewComment VARCHAR(300),
-  review_UserId INT NULL REFERENCES Users(userId),
+  reviewComment VARCHAR(300) NOT NULL,
+  reviewCreateAt DATETIME NOT NULL,
+  review_UserId INT NOT NULL REFERENCES Users(userId),
   review_BusinessId INT NOT NULL REFERENCES Business(businessId)
 );
 

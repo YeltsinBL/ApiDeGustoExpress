@@ -37,6 +37,10 @@
     {
       "name": "Sales",
       "description": "Modulo de los ventas"
+    },
+    {
+      "name": "Review",
+      "description": "Modulo de los comentarios"
     }
   ],
   "paths": {
@@ -1349,6 +1353,48 @@
                 }
             }
         }
+    },
+    "/review":{
+        "post":{
+            "tags": ["Review"],
+            "summary": "Crear un comentario",
+            "description": "Registrar un comentario",
+            "operationId": "createReview",
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Review"
+                        }
+                    }
+                },
+                "required": true
+            },
+            "responses": {
+                "201": {
+                    "description": "successful operation",
+                    "content": {
+                    "application/json": {
+                        "schema":{
+                                "type": "object",
+                                "properties": {
+                                    "message":{
+                                        "type": "string",
+                                        "example":"Comentario guardado satisfactoriamente"
+                                    }
+                                }
+                            }
+                    }
+                    }
+                },
+                "400": {
+                    "description": "Invalid input"
+                },
+                "422": {
+                    "description": "Validation exception"
+                }
+            }
+        }
     }
   },
   "components": {
@@ -1769,6 +1815,41 @@
                     "type": "number",
                     "description": "Precio del plato",
                     "example":20.00
+                }
+            }
+        },
+        "Review":{
+            "type": "object",
+            "properties": {
+                "reviewsId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example":0
+                },
+                "reviewRating":{
+                    "type": "integer",
+                    "description": "Solo se aceptan valores del 1 al 5",
+                    "example":1
+                },
+                "reviewComment":{
+                    "type": "string",
+                    "example":"Comentario sobre la atención o experiencia en el negocio"
+                },
+                "reviewCreateAt":{
+                    "type": "string",
+                    "description": "Fecha y hora del comentario",
+                    "example":"01/09/2024 12:30"
+                },
+                "review_UserId":{
+                    "type": "integer",
+                    "description": "Id del usuario que hizo el comentario",
+                    "example":0
+                },
+                "review_BusinessId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "Id del negocio donde hizo el comentario",
+                    "example": 0
                 }
             }
         }

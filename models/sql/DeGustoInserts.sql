@@ -107,10 +107,10 @@ VALUES
 (2, 3.50, 10, 12); -- 2 Limonadas para la reserva 12
 
 -- Suponiendo que el CustomerId es 1 (John Doe) y el BusinessId del restaurante 'La Buena Mesa' es 1
-INSERT INTO Reviews (reviewRating, reviewComment, review_UserId, review_BusinessId)
+INSERT INTO Reviews (reviewRating, reviewComment, reviewCreateAt, review_UserId, review_BusinessId)
 VALUES
-(5, 'Excelente comida y servicio, volveré sin duda.', 1, 1),
-(4, 'Muy buena experiencia, aunque el tiempo de espera fue largo.', 2, 1),
-(3, 'La comida estuvo bien, pero el ambiente podría mejorar.', 3, 1),
-(5, 'Un lugar maravilloso, comida deliciosa y excelente atención.', 4, 1),
-(4, 'Buena comida, pero el precio es un poco elevado.', 5, 1);
+(5, 'Excelente comida y servicio, volveré sin duda.', '2024-09-10 19:30:00.000', 1, 1),
+(4, 'Muy buena experiencia, aunque el tiempo de espera fue largo.', '2024-09-10 19:30:00.000', 2, 1),
+(3, 'La comida estuvo bien, pero el ambiente podría mejorar.', '2024-09-10 19:30:00.000', 3, 1),
+(5, 'Un lugar maravilloso, comida deliciosa y excelente atención.', '2024-09-10 19:30:00.000', 4, 1),
+(4, 'Buena comida, pero el precio es un poco elevado.', '2024-09-10 19:30:00.000', 5, 1);
