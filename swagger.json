@@ -33,6 +33,10 @@
     {
       "name": "Dish",
       "description": "Modulo de los platos"
+    },
+    {
+      "name": "Sales",
+      "description": "Modulo de los ventas"
     }
   ],
   "paths": {
@@ -1303,6 +1307,48 @@
                 }
             }
         }
+    },
+    "/sales":{
+        "post":{
+            "tags": ["Sales"],
+            "summary": "Crear la reserva de platos",
+            "description": "Registrar una reservación",
+            "operationId": "createReservation",
+            "requestBody": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Sales"
+                        }
+                    }
+                },
+                "required": true
+            },
+            "responses": {
+                "201": {
+                    "description": "successful operation",
+                    "content": {
+                    "application/json": {
+                        "schema":{
+                                "type": "object",
+                                "properties": {
+                                    "message":{
+                                        "type": "string",
+                                        "example":"Reservación guardada satisfactoriamente"
+                                    }
+                                }
+                            }
+                    }
+                    }
+                },
+                "400": {
+                    "description": "Invalid input"
+                },
+                "422": {
+                    "description": "Validation exception"
+                }
+            }
+        }
     }
   },
   "components": {
@@ -1656,6 +1702,75 @@
             },
             "required": [ "dishId", "dishName","dishDescription",
         "dishPrice","dishPhoto","dishStatus","dish_BusinessId","dish_CategoriesId"]
+        },
+        "Sales":{
+            "type": "object",
+            "properties": {
+                "reservationId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 0
+                },
+                "reservationTime":{
+                    "type": "string",
+                    "description": "Fecha y hora de la reserva",
+                    "example":"01/09/2024 12:30"
+                },
+                "reservationNumberPeople":{
+                    "type": "integer",
+                    "description": "Cantidad de personas",
+                    "example":"5"
+                },
+                "reservationPaymentAmount":{
+                    "type": "number",
+                    "description": "Monto total de la reserva",
+                    "example":20.00
+                },
+                "reservationPhoto":{
+                    "type": "string",
+                    "description": "Captura de la transacción sobre el adelanto de la reserva",
+                    "example":"Captura de la transacción sobre el adelanto de la reserva"
+                },
+                "reservation_UserId":{
+                    "type": "integer",
+                    "description": "Id del usuario que hizo la reserva",
+                    "example":0
+                },
+                "reservation_BusinessId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "Id del negocio donde hizo la reserva",
+                    "example": 0
+                }
+                ,
+                "reservationDetails": {
+                    "type": "array",
+                    "items":{
+                        "$ref": "#/components/schemas/SalesDetail"
+                    }
+                }
+            }
+        },
+        "SalesDetail":{
+            "type": "object",
+            "properties": {
+                "detail_DishId":{
+                    "type": "integer",
+                    "description": "Id del plato",
+                    "example":1
+                },
+                "reservationDetailQuantity": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "Cantidad del plato a reservar",
+                    "example": 0
+                },
+                "reservationDetailPrice":{
+                    "type": "number",
+                    "description": "Precio del plato",
+                    "example":20.00
+                }
+            }
         }
     }
   }
