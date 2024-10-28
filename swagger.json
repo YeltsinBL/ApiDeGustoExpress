@@ -1396,7 +1396,7 @@
             }
         }
     },
-    "/sales/{userId}" :{
+    "/sales/user/{userId}" :{
         "get":{
             "tags": [ "Sales" ],
             "summary": "Obtener las reservaciones por el Id del Usuario",

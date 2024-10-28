@@ -3,7 +3,7 @@ import { createItem, getItemsByBusiness, getItemsByUser } from "../controllers/s
 
 const routers = express.Router()
 
-routers.get('/:userId', getItemsByUser)
+routers.get('/user/:userId', getItemsByUser)
 routers.get('/business/:businessId', getItemsByBusiness)
 routers.post('/', createItem)
 
