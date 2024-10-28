@@ -1,6 +1,6 @@
 
 import { httpError } from "../helpers/handleError.js"
-import { create, getSalesByUser } from "../models/sales.js"
+import { create, getSalesByBusiness, getSalesByUser } from "../models/sales.js"
 
 export const createItem = async (req, res) => {
     try {
@@ -15,6 +15,14 @@ export const createItem = async (req, res) => {
 export const getItemsByUser = async(req, res) =>{
     try {
         const result = await getSalesByUser({params: req.params})
+        return res.json(result) 
+    } catch (e) {
+        
+    }
+}
+export const getItemsByBusiness = async(req, res) =>{
+    try {
+        const result = await getSalesByBusiness({params: req.params})
         return res.json(result) 
     } catch (e) {
         

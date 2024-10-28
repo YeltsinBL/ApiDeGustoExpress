@@ -58,3 +58,25 @@ export async function getSalesByUser({params}) {
     console.error(error)
   }
 }
+export async function getSalesByBusiness({params}) {
+  try {
+      const {businessId} = params
+      const pool = await getConnection()
+      let result = await pool.request()
+                      .input('businessId',mssql.Int,businessId)
+                      .query(' SELECT [r].[reservationId], ' +
+                          ' [r].[reservationTime], ' +
+                          ' [r].[reservationNumberPeople], ' +
+                          ' [r].[reservationPaymentAmount], ' +
+                          ' [r].[reservationPaymentStatus], ' +
+                          ' [b].[businessName], ' +
+                          ' [u].[userName] FROM Reservations r ' +
+                          ' INNER JOIN Business b ON r.reservation_BusinessId = b.businessId ' +
+                          ' INNER JOIN Users u ON r.reservation_UserId = u.userId ' +
+                          ' where r.reservation_BusinessId = @businessId')
+      pool.close()
+      return result.recordset
+  } catch (error) {
+    console.error(error)
+  }
+}
