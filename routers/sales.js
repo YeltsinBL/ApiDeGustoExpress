@@ -1,8 +1,9 @@
 import express from "express";
-import { createItem } from "../controllers/sales.js";
+import { createItem, getItemsByUser } from "../controllers/sales.js"
 
 const routers = express.Router()
 
+routers.get('/:userId', getItemsByUser)
 routers.post('/', createItem)
 
 export default routers

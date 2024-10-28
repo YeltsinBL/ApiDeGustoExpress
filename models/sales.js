@@ -36,3 +36,25 @@ export async function create ({ input }) {
       console.error(error)
     }
 }
+export async function getSalesByUser({params}) {
+  try {
+      const {userId} = params
+      const pool = await getConnection()
+      let result = await pool.request()
+                      .input('userId',mssql.Int,userId)
+                      .query(' SELECT [r].[reservationId], ' +
+                          ' [r].[reservationTime], ' +
+                          ' [r].[reservationNumberPeople], ' +
+                          ' [r].[reservationPaymentAmount], ' +
+                          ' [r].[reservationPaymentStatus], ' +
+                          ' [b].[businessName], ' +
+                          ' [u].[userName] FROM Reservations r ' +
+                          ' INNER JOIN Business b ON r.reservation_BusinessId = b.businessId ' +
+                          ' INNER JOIN Users u ON r.reservation_UserId = u.userId ' +
+                          ' where r.reservation_UserId = @userId')
+      pool.close()
+      return result.recordset
+  } catch (error) {
+    console.error(error)
+  }
+}

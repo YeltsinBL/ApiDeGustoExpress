@@ -1354,6 +1354,48 @@
             }
         }
     },
+    "/sales/{userId}" :{
+        "get":{
+            "tags": [ "Sales" ],
+            "summary": "Obtener las reservaciones por el Id del Usuario",
+            "description": "Lista de todas las reservaciones por el Id del Usuario",
+            "operationId": "getSalesByUserId",
+            "parameters": [
+                {
+                    "name": "userId",
+                    "in": "path",
+                    "description": "ID del usuario",
+                    "required": true,
+                    "schema": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 0
+                    }
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "successful operation",
+                    "content": {
+                    "application/json":{
+                            "schema":{
+                                "type": "array",
+                                "items":{
+                                    "$ref": "#/components/schemas/SalesList"
+                                }
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    "description": "Invalid input"
+                },
+                "422": {
+                    "description": "Validation exception"
+                }
+            }
+        }
+    },
     "/review":{
         "post":{
             "tags": ["Review"],
@@ -1815,6 +1857,46 @@
                     "type": "number",
                     "description": "Precio del plato",
                     "example":20.00
+                }
+            }
+        },
+        "SalesList":{
+            "type": "object",
+            "properties": {
+                "reservationId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 0
+                },
+                "reservationTime":{
+                    "type": "string",
+                    "description": "Fecha y hora de la reserva",
+                    "example":"01/09/2024 12:30"
+                },
+                "reservationNumberPeople":{
+                    "type": "integer",
+                    "description": "Cantidad de personas",
+                    "example":"5"
+                },
+                "reservationPaymentAmount":{
+                    "type": "number",
+                    "description": "Monto total de la reserva",
+                    "example":20.00
+                },
+                "reservationPaymentStatus":{
+                    "type": "integer",
+                    "description": "Numero sobre el estado de la reserva",
+                    "example":1
+                },
+                "businessName":{
+                    "type": "string",
+                    "description": "Nombre del negocio",
+                    "example":"La Buena Mesa"
+                },
+                "userName": {
+                    "type": "string",
+                    "description": "Usuario del usuario",
+                    "example": "prueba"
                 }
             }
         },
