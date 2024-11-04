@@ -42,17 +42,17 @@ export async function getAllStates() {
     console.error(error)
   }
 }
-export async function getAllMobile({input}) {
+export async function getAllSearch({input}) {
   try {
-      const { latitude, longitude, businessName } = input
+      const { latitude, longitude, search } = input
       const pool = await getConnection()
       let menorQue=0.6
-      if (typeof businessName == 'string' ) menorQue = 9999
+      if (typeof search == 'string' ) menorQue = 9999
       
       let result = await pool.request()
             .input('LATITUDE', mssql.Float, latitude)
             .input('LONGITUDE', mssql.Float, longitude)
-            .input('businessName', mssql.VarChar, (typeof businessName == 'string' ? businessName : ''))
+            .input('search', mssql.VarChar, (typeof search == 'string' ? search : ''))
             .input('menorQue', mssql.Float, menorQue)
             .query('SELECT [b].[businessId], ' +
               ' [b].[businessName], [b].[businessAddress], ' +
@@ -64,18 +64,59 @@ export async function getAllMobile({input}) {
               '   THEN CONCAT(ROUND((6371 * ACOS(COS(RADIANS(@LATITUDE)) * COS(RADIANS(b.businessLatitude)) * COS(RADIANS(b.businessLongitude) - RADIANS(@LONGITUDE)) + SIN(RADIANS(@LATITUDE)) * SIN(RADIANS(b.businessLatitude)))) * 1000, 2), \' m \') ' +
               '   ELSE CONCAT(ROUND(6371 * ACOS(COS(RADIANS(@LATITUDE)) * COS(RADIANS(b.businessLatitude)) * COS(RADIANS(b.businessLongitude) - RADIANS(@LONGITUDE)) + SIN(RADIANS(@LATITUDE)) * SIN(RADIANS(b.businessLatitude))), 2), \' km \') ' +
               ' END AS businessDistance ' +
+              '  , [ds].[dishId], [ds].[dishName], [ds].[dishDescription], [ds].[dishPrice], [ds].[dishPhoto], [ds].[dishStatus], ' +
+              '   [ds].[dish_BusinessId], [ds].[dish_CategoriesId] ' +
               ' FROM Business b ' +
               ' LEFT join Dishes ds on b.businessId=ds.dish_BusinessId ' +
+              ' LEFT JOIN DishCategories AS c ON ds.dish_CategoriesId = c.dishCategoryID ' +
               ' LEFT JOIN Reviews rw ON b.businessId = rw.review_BusinessId ' +
-              ' WHERE [b].businessStatus = 2 AND  CONCAT(b.businessName,\' \',ds.dishName,\' \',ds.dishDescription ) LIKE \'%\'+@businessName+\'%\' ' +
+              ' WHERE [b].businessStatus = 2 AND [ds].[dishStatus] = 1 AND  CONCAT(b.businessName,\' \',ds.dishName,\' \',ds.dishDescription ) LIKE \'%\'+@search+\'%\' ' +
               ' GROUP BY [b].[businessId], [b].[businessName], ' +
               ' [b].[businessAddress], [b].[businessPhoneNumber], ' +
               ' [b].[businessStatus], [b].[businessLogo], ' +
               ' [b].[businessLatitude], [b].[businessLongitude] , [b].[businessCategorization] ' +
+              '  , [ds].[dishId], [ds].[dishName], [ds].[dishDescription], [ds].[dishPrice], [ds].[dishPhoto], [ds].[dishStatus], ' +
+              '   [ds].[dish_BusinessId], [ds].[dish_CategoriesId] ' +
               ' HAVING (6371 * ACOS(COS(RADIANS(@LATITUDE)) * COS(RADIANS(b.businessLatitude)) * COS(RADIANS(b.businessLongitude) - RADIANS(@LONGITUDE)) + SIN(RADIANS(@LATITUDE)) * SIN(RADIANS(b.businessLatitude)))) < @menorQue ' + // >5km
               ' ORDER BY businessAverageRating DESC;')
       pool.close()
-      return result.recordset
+      if (!result.recordset.length) return [] // {"codeStatus":404, "message":"No hay restaurantes ni platos con esa descripción"}
+    // Agrupa los datos por negocio
+    const businessesMap = {};
+    result.recordset.forEach(row => {
+        if (!businessesMap[row.businessId]) {
+            businessesMap[row.businessId] = {
+                businessId: row.businessId,
+                businessName: row.businessName,
+                businessAddress: row.businessAddress,
+                businessPhoneNumber: row.businessPhoneNumber,
+                businessStatus: row.businessStatus,
+                businessLogo: row.businessLogo,
+                businessLatitude: row.businessLatitude,
+                businessLongitude: row.businessLongitude,
+                businessCategorization: row.businessCategorization,
+                business_AreaId: row.business_AreaId,
+                business_UserId: row.business_UserId,
+                dishes: []
+            };
+        }
+        // Añadir cada plato al arreglo de platos del negocio
+        if (row.dishId) {  // Solo agregar si hay un plato asociado
+            businessesMap[row.businessId].dishes.push({
+                dishId: row.dishId,
+                dishName: row.dishName,
+                dishDescription: row.dishDescription,
+                dishPrice: row.dishPrice,
+                dishPhoto: row.dishPhoto,
+                dishStatus: row.dishStatus,
+                dish_BusinessId: row.dish_BusinessId,
+                dish_CategoriesId: row.dish_CategoriesId
+            })
+        }
+    })
+    // Convierte el objeto de negocios en un array
+    const response = Object.values(businessesMap);
+    return response
   } catch (error) {
     console.error(error)
   }

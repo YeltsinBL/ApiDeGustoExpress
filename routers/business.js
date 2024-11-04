@@ -1,10 +1,10 @@
 import express from 'express'
-import {getItems, getItemById, deleteItemById, createItem, updateItem, getItemsMobile, updateStates, getItemsStates, getItemsPopular} from '../controllers/business.js'
+import {getItems, getItemById, deleteItemById, createItem, updateItem, getItemsSearch, updateStates, getItemsStates, getItemsPopular} from '../controllers/business.js'
 
 const routers = express.Router()
 
 routers.get('/', getItems)
-routers.get('/mobile', getItemsMobile)
+routers.get('/search', getItemsSearch)
 routers.get('/popular', getItemsPopular)
 routers.get('/states', getItemsStates)
 routers.get('/:id', getItemById)

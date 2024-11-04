@@ -1,5 +1,5 @@
 import { httpError } from "../helpers/handleError.js"
-import { getAll, getById,deleteById, create, upload, getAllMobile, uploadState, getAllStates , getPopularBusiness} from '../models/business.js'
+import { getAll, getById,deleteById, create, upload, getAllSearch, uploadState, getAllStates , getPopularBusiness} from '../models/business.js'
 import { uploadSingleImageAsync } from "../middlewares/multer-config.js";
 import { saveImageCloudinary } from '../models/image.js'
 
@@ -13,9 +13,9 @@ export const getItems = async(req, res)=>{
         httpError(res,e)
     }
 }
-export const getItemsMobile = async(req, res)=>{
+export const getItemsSearch = async(req, res)=>{
     try {
-        const listAll = await getAllMobile({input: req.query})
+        const listAll = await getAllSearch({input: req.query})
         res.send(listAll)
 
     } catch (e) {

@@ -552,14 +552,14 @@
             }
         }
     },
-    "/business/mobile":{
+    "/business/search":{
         "get":{
             "tags": [
                 "Business"
             ],
-            "summary": "Lista de todos los negocios activos a menos de 5 kilómetros",
-            "description": "Lista de todos los negocios activos en la aplicación móvil",
-            "operationId": "getBusinessMobile",
+            "summary": "Lista de los negocios con sus platos por una descripción y que estén activos",
+            "description": "Lista de los negocios con sus platos activos en la aplicación móvil",
+            "operationId": "getBusinessSearch",
             "parameters": [
                 {
                     "name": "latitude",
@@ -582,9 +582,9 @@
                     }
                 }, 
                 {
-                    "name": "businessName",
+                    "name": "search",
                     "in": "query",
-                    "description": "Nombre del negocio a buscar",
+                    "description": "Descripción del negocio o plato",
                     "schema":{
                         "type": "string",
                         "example":"La Buena Mesa"
@@ -599,7 +599,7 @@
                             "schema":{
                                 "type": "array",
                                 "items":{
-                                    "$ref": "#/components/schemas/BusinessMovil"
+                                    "$ref": "#/components/schemas/BusinessDishes"
                                 }
                             }
                         }
@@ -1832,6 +1832,108 @@
             },
             "required": [ "dishId", "dishName","dishDescription",
         "dishPrice","dishPhoto","dishStatus","dish_BusinessId","dish_CategoriesId"]
+        },
+        "DishDetail":{
+            "type": "object",
+            "properties": {
+                "dishId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 0
+                },
+                "dishName":{
+                    "type": "string",
+                    "example":"Tallarín con pollo"
+                },
+                "dishDescription":{
+                    "type": "string",
+                    "example":"Descripción de lo que lleva el plato"
+                },
+                "dishPrice":{
+                    "type": "number",
+                    "example":20.00
+                },
+                "dishPhoto":{
+                    "type": "string",
+                    "example":"Ruta final donde esta almacenada la imagen"
+                },
+                "dishStatus":{
+                    "type": "boolean",
+                    "example":true
+                },
+                "dish_BusinessId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 0
+                },
+                "dish_CategoriesId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 0
+                }
+            }
+        },
+        "BusinessDishes":{
+            "type": "object",
+            "properties": {
+                "businessId":{
+                    "type": "integer",
+                    "format": "int64",
+                    "example":0
+                },
+                "businessName":{
+                    "type": "string",
+                    "example":"La Buena Mesa"
+                },
+                "businessAddress":{
+                    "type": "string",
+                    "example":"123 Gourmet Street"
+                },
+                "businessPhoneNumber":{
+                    "type": "string",
+                    "example":"123456789"
+                },
+                "businessStatus":{
+                    "type": "integer",
+                    "format": "int64",
+                    "example":1
+                },
+                "businessLogo":{
+                    "type": "string",
+                    "example":"restaurant_logo.png"
+                },
+                "businessLatitude":{
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 40.712776
+                },
+                "businessLongitude":{
+                    "type": "integer",
+                    "format": "int64",
+                    "example": -74.005974
+                },
+                "businessCategorization":{
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 3
+                },
+                "business_AreaId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 1
+                },
+                "business_UserId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 1
+                },
+                "dishes": {
+                    "type": "array",
+                    "items":{
+                        "$ref": "#/components/schemas/DishDetail"
+                    }
+                }
+            }
         },
         "Sales":{
             "type": "object",
