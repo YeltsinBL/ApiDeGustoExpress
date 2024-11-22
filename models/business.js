@@ -46,13 +46,16 @@ export async function getAllSearch({input}) {
   try {
       const { latitude, longitude, search } = input
       const pool = await getConnection()
-      let menorQue=0.6
-      if (typeof search == 'string' ) menorQue = 9999
-      
+      let menorQue = 99999999999
+      if (typeof search != 'string' ) {
+        menorQue = 0.6
+        search = ''
+      }
+      console.log(search, menorQue)
       let result = await pool.request()
             .input('LATITUDE', mssql.Float, latitude)
             .input('LONGITUDE', mssql.Float, longitude)
-            .input('search', mssql.VarChar, (typeof search == 'string' ? search : ''))
+            .input('search', mssql.VarChar, search)
             .input('menorQue', mssql.Float, menorQue)
             .query('SELECT [b].[businessId], ' +
               ' [b].[businessName], [b].[businessAddress], ' +
@@ -70,7 +73,7 @@ export async function getAllSearch({input}) {
               ' LEFT join Dishes ds on b.businessId=ds.dish_BusinessId ' +
               ' LEFT JOIN DishCategories AS c ON ds.dish_CategoriesId = c.dishCategoryID ' +
               ' LEFT JOIN Reviews rw ON b.businessId = rw.review_BusinessId ' +
-              ' WHERE [b].businessStatus = 2 AND [ds].[dishStatus] = 1 AND  CONCAT(b.businessName,\' \',ds.dishName,\' \',ds.dishDescription ) LIKE \'%\'+@search+\'%\' ' +
+              ' WHERE [b].[businessStatus] = 2 AND [b].[business_AreaId] = 1 AND ([ds].[dishId] is null or [ds].[dishStatus] = 1) AND  CONCAT(b.businessName,\' \',ds.dishName,\' \',ds.dishDescription ) LIKE \'%\'+@search+\'%\' ' +
               ' GROUP BY [b].[businessId], [b].[businessName], ' +
               ' [b].[businessAddress], [b].[businessPhoneNumber], ' +
               ' [b].[businessStatus], [b].[businessLogo], ' +
@@ -95,8 +98,9 @@ export async function getAllSearch({input}) {
                 businessLatitude: row.businessLatitude,
                 businessLongitude: row.businessLongitude,
                 businessCategorization: row.businessCategorization,
-                business_AreaId: row.business_AreaId,
-                business_UserId: row.business_UserId,
+                businessAverageRating: row.businessAverageRating,
+                businessTotalReviews: row.businessTotalReviews,
+                businessDistance: row.businessDistance,
                 dishes: []
             };
         }
