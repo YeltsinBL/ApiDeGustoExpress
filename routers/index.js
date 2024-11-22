@@ -41,6 +41,11 @@ router.use((req, res, next) => {
     req.session = { user: null }
     try {
       const data = jwt.verify(token, process.env.SECRET_JWT_KEY)
+      res.setHeader("Access-Control-Allow-Origin", "*")
+      res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept"
+      )
       req.session.user = data
     } catch (error) {
       req.session.use = null
