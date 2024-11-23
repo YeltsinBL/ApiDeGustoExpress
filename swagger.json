@@ -1917,15 +1917,19 @@
                     "format": "int64",
                     "example": 3
                 },
-                "business_AreaId": {
+                "businessAverageRating": {
                     "type": "integer",
                     "format": "int64",
                     "example": 1
                 },
-                "business_UserId": {
+                "businessTotalReviews": {
                     "type": "integer",
                     "format": "int64",
-                    "example": 1
+                    "example": 5
+                },
+                "businessDistance": {
+                    "type": "string",
+                    "example": "5448.94 km"
                 },
                 "dishes": {
                     "type": "array",
