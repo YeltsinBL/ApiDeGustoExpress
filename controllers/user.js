@@ -77,6 +77,7 @@ export const deleteItemById = async(req, res) =>{
 export const createItem = async (req, res) => {
     console.log(req.body)
     const user = await create({ input: req.body })
+    if(user.codeStatus) return res.status(user.codeStatus).json({message:user.message})
     res.status(201).json(user)
 }
 export const logout = async (req, res) => {

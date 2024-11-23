@@ -146,8 +146,11 @@
                 "400": {
                     "description": "Invalid input"
                 },
-                "422": {
-                    "description": "Validation exception"
+                "409": {
+                    "description": "El correo electrónico o nombre de usuario ya está registrado. "
+                },
+                "500": {
+                    "description": "Error al crear el usuario o conexión a la base de datos."
                 }
             }
         }

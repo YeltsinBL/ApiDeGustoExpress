@@ -29,7 +29,7 @@ CREATE TABLE Persons (
 );
 CREATE TABLE Users (
   userId INT PRIMARY KEY IDENTITY,
-  userName VARCHAR(100) NOT NULL,
+  userName VARCHAR(100) NOT NULL UNIQUE,
   userPassword VARCHAR(250) NOT NULL,
   userCreatedAt DATE NOT NULL,
   userStatus INT NOT NULL,

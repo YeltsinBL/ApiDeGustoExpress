@@ -70,55 +70,114 @@ export async function getById({id}) {
     }
 }
 export async function create ({ input }) {
-    try {
-      const {
-        personTypeId, name, email, phoneNumber, userName, password, createDate
-      } = input
+    const {
+      personTypeId, name, email, phoneNumber,
+      userName, password, createDate,
+    } = input
 
-      const pool = await getConnection()
+  let pool
+  // Conectar al pool de base de datos
+  pool = await getConnection()
+  // Validar que el pool esté conectado
+  if (!pool.connected) {
+    throw new Error('La conexión al pool no se estableció correctamente.');
+  }
+  const transaction = new mssql.Transaction()
+  try {
+    // Iniciar transacción
+    await transaction.begin();
+    // Encriptar la contraseña antes de la inserción
+    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+    const userStatus = personTypeId == 1 ? 0 : 1;
+    // Insertar en Persons
+    const resultPerson = await pool
+      .request()
+      .input('personName', mssql.VarChar, name)
+      .input('personEmail', mssql.VarChar, email)
+      .input('personPhoneNumber', mssql.VarChar, phoneNumber)
+      .input('personType', mssql.Int, personTypeId)
+      .query(
+        `INSERT INTO Persons (personName, personEmail, personPhoneNumber, person_Type) 
+         VALUES (@personName, @personEmail, @personPhoneNumber, @personType); 
+         SELECT SCOPE_IDENTITY() AS personId;`
+      );
 
-      let resultPerson = await pool.request()
-        .input('personName', mssql.VarChar, name)
-        .input('personEmail', mssql.VarChar, email)
-        .input('personPhoneNumber', mssql.VarChar, phoneNumber)
-        .input('personType', mssql.Int, personTypeId)
-        .query('INSERT INTO Persons (personName, personEmail, personPhoneNumber, person_Type) ' +
-            'values(@personName, @personEmail, @personPhoneNumber, @personType); Select SCOPE_IDENTITY() as personId;')
-      const [{ personId }] = resultPerson.recordset
+    const [{ personId }] = resultPerson.recordset;
 
-      // Encriptar la contraseña
-      const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS)
-      const userStatus = personTypeId==1?0:1
-      let resultUser = await pool.request()
-        .input('userName',mssql.VarChar, userName)
-        .input('userPassword',mssql.VarChar, hashedPassword)
-        .input('userStatus',mssql.Int, userStatus)
-        .input('userCreatedAt',mssql.Date, createDate)
-        .input('user_personId',mssql.Int, personId)
-        .query('Insert into Users (userName, userPassword, userStatus, userCreatedAt, user_PersonId) '+
-            'values(@userName, @userPassword, @userStatus, @userCreatedAt, @user_personId); Select SCOPE_IDENTITY() as userId;'
-        )
-      const [{ userId }] = resultUser.recordset
+    // Insertar en Users
+    const resultUser = await pool
+      .request()
+      .input('userName', mssql.VarChar, userName)
+      .input('userPassword', mssql.VarChar, hashedPassword)
+      .input('userStatus', mssql.Int, userStatus)
+      .input('userCreatedAt', mssql.Date, createDate)
+      .input('user_personId', mssql.Int, personId)
+      .query(
+        `INSERT INTO Users (userName, userPassword, userStatus, userCreatedAt, user_PersonId) 
+         VALUES (@userName, @userPassword, @userStatus, @userCreatedAt, @user_personId); 
+         SELECT SCOPE_IDENTITY() AS userId;`
+      );
 
-      let result = await pool.request()
-        .input('personTypeId', mssql.Int, personTypeId)
-        .query('SELECT * FROM PersonTypes '+
-                'WHERE personTypeId=@personTypeId')
-      const [{ personTypeName }] = result.recordset
+    const [{ userId }] = resultUser.recordset;
 
-      pool.close()
-      return {'userId':userId,
-            'userName':userName,
-            'personName':name,
-            'personEmail':email,
-            'personPhoneNumber':phoneNumber,
-            'personTypeName':personTypeName,
-            'userStatus': userStatus,
-            'userCreatedAt': createDate
+    // Consultar el nombre del tipo de persona
+    const resultPersonType = await pool
+      .request()
+      .input('personTypeId', mssql.Int, personTypeId)
+      .query(
+        `SELECT personTypeName 
+         FROM PersonTypes 
+         WHERE personTypeId = @personTypeId`
+      );
+
+    const [{ personTypeName }] = resultPersonType.recordset;
+
+    // Confirmar la transacción
+    await transaction.commit();
+
+    // Cerrar conexión y devolver resultado
+    pool.close();
+    return {
+      userId,
+      userName,
+      personName: name,
+      personEmail: email,
+      personPhoneNumber: phoneNumber,
+      personTypeName,
+      userStatus,
+      userCreatedAt: createDate,
+    };
+  } catch (error) {
+    // Revertir la transacción en caso de error
+    await transaction.rollback()
+  
+    if (error.code === 'EREQUEST' && error.number === 2627) {
+      // Analizar el mensaje de error para identificar la columna
+      if (error.message.includes(email)) {
+        return {
+          status: 409,
+          message: 'El correo electrónico ya está registrado.',
+          // details: error.message,
+        }
+      } else if (error.message.includes(userName)) {
+        return {
+          status: 409,
+          message: 'El nombre de usuario ya está registrado.',
+          // details: error.message,
+        }
       }
-    } catch (error) {
-      console.error(error)
+    }  
+    // Manejar otros errores (500 por defecto)
+    console.error('Error en la transacción:', error);
+    return {
+      status: 500,
+      message: 'Error al crear el usuario.',
+      // details: error.message,
     }
+  } finally {
+    // Asegurar que la conexión se cierra
+    if (pool) pool.close();
+  }
 }
 export async function deleteById({ id }) {
     try {
