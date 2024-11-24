@@ -65,11 +65,8 @@ export const deleteItemById = async(req, res) =>{
     try {
         const {id} =req.params
         const result = await deleteById({id})
-        if (result === false) {
-            return res.status(404).json({ message: 'Usuario no encontrado' })
-          }
-      
-          return res.json({ message: 'Usuario eliminado' }) 
+        if(result.codeStatus) return res.status(result.codeStatus).json({message:result.message})
+        return res.json({ message: 'Usuario eliminado' }) 
     } catch (e) {
         
     }

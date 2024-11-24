@@ -154,17 +154,41 @@ export async function create ({ input }) {
   }
 }
 export async function deleteById({ id }) {
+    const pool = await getConnection()
+    // Validar que el pool esté conectado
+    if (!pool.connected) {
+      throw new Error('La conexión al pool no se estableció correctamente.');
+    }
+    const transaction = new mssql.Transaction()
     try {
-      const pool = await getConnection()
+      // Iniciar transacción
+      await transaction.begin();
+      let verifyUser = await pool.request()
+        .input('userId', mssql.Int, id)
+        .query(
+          'SELECT userId FROM Users u WHERE u.userId=@userId')
+      
+      // Validar si hay resultados en la consulta
+      if (!verifyUser.recordset.length) {
+        return await handleErrorTransact({
+          transaction,
+          error:{code:"EREQUEST", number: 547, message:"userId"}}
+        )
+      }
       await pool.request()
         .input('userId', mssql.Int, id)
         .query(
           'UPDATE Users set userStatus=2 WHERE userId=@userId')
 
-      pool.close()
+      await transaction.commit();
+      pool.close();
       return true
     } catch (error) {
       console.log(error)
+      return await handleErrorTransact({transaction, error})
+    } finally {
+      // Asegurar que la conexión se cierra
+      if (pool) pool.close();
     }
 }
 export async function upload({input}) {

@@ -333,13 +333,32 @@
                     "content": {
                         "application/json":{
                             "schema":{
-                                "type": "boolean"
+                                "type": "object",
+                                "properties": {
+                                    "message":{
+                                        "type": "string",
+                                        "example":"Usuario eliminado"
+                                    }
+                                }
                             }
                         }
                     }
                 },
-                "404": {
-                    "description": "Negocio no encontrado"
+                "409": {
+                    "description": "Usuario no encontrado",
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "type": "object",
+                                "properties": {
+                                    "message":{
+                                        "type": "string",
+                                        "example":"Usuario no encontrado"
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         },
