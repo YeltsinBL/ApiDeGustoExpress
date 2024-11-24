@@ -150,7 +150,7 @@
                     "description": "El correo electrónico o nombre de usuario ya está registrado. "
                 },
                 "500": {
-                    "description": "Error al crear el usuario o conexión a la base de datos."
+                    "description": "No se pudo guardar la información del usuario."
                 }
             }
         }
@@ -415,7 +415,10 @@
                     }
                 },
                 "404": {
-                    "description": "Negocio no encontrado"
+                    "description": "No se encontró al usuario, tipo persona o estado usuario."
+                },
+                "500": {
+                    "description": "No se pudo guardar la información del usuario."
                 }
             }
         }

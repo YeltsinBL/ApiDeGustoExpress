@@ -75,9 +75,8 @@ export async function create ({ input }) {
       userName, password, createDate,
     } = input
 
-  let pool
   // Conectar al pool de base de datos
-  pool = await getConnection()
+  const pool = await getConnection()
   // Validar que el pool esté conectado
   if (!pool.connected) {
     throw new Error('La conexión al pool no se estableció correctamente.');
@@ -148,32 +147,7 @@ export async function create ({ input }) {
       userCreatedAt: createDate,
     };
   } catch (error) {
-    // Revertir la transacción en caso de error
-    await transaction.rollback()
-  
-    if (error.code === 'EREQUEST' && error.number === 2627) {
-      // Analizar el mensaje de error para identificar la columna
-      if (error.message.includes(email)) {
-        return {
-          status: 409,
-          message: 'El correo electrónico ya está registrado.',
-          // details: error.message,
-        }
-      } else if (error.message.includes(userName)) {
-        return {
-          status: 409,
-          message: 'El nombre de usuario ya está registrado.',
-          // details: error.message,
-        }
-      }
-    }  
-    // Manejar otros errores (500 por defecto)
-    console.error('Error en la transacción:', error);
-    return {
-      status: 500,
-      message: 'Error al crear el usuario.',
-      // details: error.message,
-    }
+    return await handleErrorTransact({transaction, error, email, userName})
   } finally {
     // Asegurar que la conexión se cierra
     if (pool) pool.close();
@@ -194,18 +168,31 @@ export async function deleteById({ id }) {
     }
 }
 export async function upload({input}) {
+  const {
+    userId, personTypeId, userStatus
+  } = input
+  const pool = await getConnection()
+  // Validar que el pool esté conectado
+  if (!pool.connected) {
+    throw new Error('La conexión al pool no se estableció correctamente.');
+  }
+  const transaction = new mssql.Transaction()
   try {
-    //console.log(input)
-    const {
-      userId, personTypeId, userStatus
-    } = input
-
-    const pool = await getConnection()
+    // Iniciar transacción
+    await transaction.begin();
     let verifyTypePerson = await pool.request()
         .input('userId', mssql.Int, userId)
         .query('SELECT p.person_Type FROM Persons p '+
                 'JOIN Users u ON p.personId = u.user_personId '+
-                'WHERE u.userId=userId')
+                'WHERE u.userId=@userId')
+      
+      // Validar si hay resultados en la consulta
+      if (!verifyTypePerson.recordset.length) {
+        return await handleErrorTransact({
+          transaction,
+          error:{code:"EREQUEST", number: 547, message:"userId"}}
+        )
+      }
       const [{ person_Type }] = verifyTypePerson.recordset
       if (person_Type != personTypeId) {
         await pool.request()
@@ -216,6 +203,12 @@ export async function upload({input}) {
             'where personId = (select user_personId FROM Users WHERE userId = @userId);'
           )
       }
+      if (userStatus > 3) {
+        return await handleErrorTransact({
+          transaction,
+          error:{code:"EREQUEST", number: 547, message:"userStatus"}}
+        )
+      }
       await pool.request()
           .input('userId',mssql.Int,userId)
           .input('userStatus',mssql.Int,userStatus)
@@ -224,7 +217,9 @@ export async function upload({input}) {
             'where userId = @userId;'
           )
     
-    //console.log(result)
+    // Confirmar la transacción
+    await transaction.commit();
+    pool.close();
     return {
       'userId':userId,
       'personTypeId':personTypeId,
@@ -232,5 +227,64 @@ export async function upload({input}) {
     }   
   } catch (error) {
     
+    return await handleErrorTransact({transaction, error})
+    
+  } finally {
+    // Asegurar que la conexión se cierra
+    if (pool) pool.close();
+  }
+}
+async function handleErrorTransact({transaction, error, email, userName}) {
+  //console.log('error.message', error.message)
+  // Revertir transacción si ocurre un error
+  if (transaction.isActive) {
+    await transaction.rollback();
+  }
+  if (error.code === 'EREQUEST') {
+    if(error.number === 2627) {  // Analizar el mensaje de error para identificar la columna
+      if (error.message.includes(email)) {
+        return {
+          codeStatus: 409,
+          message: 'El correo electrónico ya está registrado.',
+          // details: error.message,
+        }
+      } else if (error.message.includes(userName)) {
+        return {
+          codeStatus: 409,
+          message: 'El nombre de usuario ya está registrado.',
+          // details: error.message,
+        }
+      }
+    }
+    if(error.number === 547) {
+      if(error.message.includes('personTypeId')) {
+        return {
+          codeStatus: 409,
+          message: 'Tipo de Persona no encontrado.',
+          // details: error.message,
+        }
+      }
+      if(error.message.includes('userId')) {
+        return {
+          codeStatus: 409,
+          message: 'Usuario no encontrado.',
+          // details: error.message,
+        }
+      }
+      if(error.message.includes('userStatus')) {
+        return {
+          codeStatus: 409,
+          message: 'Estado de usuario no encontrado.',
+          // details: error.message,
+        }
+      }
+    }
+  }
+  // Manejar otros errores (500 por defecto)
+  console.error('Error en la transacción:', error);
+  return {
+    codeStatus: 500,
+    message: 'No se pudo guardar la información del usuario.',
+    // details: error.message,
   }
 }

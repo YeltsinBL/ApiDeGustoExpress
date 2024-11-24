@@ -90,6 +90,7 @@ export const updateItem = async(req, res) =>{
         const {id} = req.params
         req.body.userId = id
         const result = await upload({input: req.body})
+        if(result.codeStatus) return res.status(result.codeStatus).json({message:result.message})
         res.status(200).json(result)
     } catch (error) {
         return res.status(400).json({message: error.message})
